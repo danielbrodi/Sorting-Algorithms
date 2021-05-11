@@ -32,7 +32,7 @@ void BubbleSort(int *arr, size_t size)
 	(which means till it reaches the end of the array and finished sorting it)
 	{     
 		item_to_sort = 0;    
-		while (item_to_sort <= size - sorted_items - 1):
+		while (item_to_sort < size - sorted_items - 1):
 		{     
 			loop through all the items and compare each to its next.
 			if (item_to_sort > item_to_sort + 1):
