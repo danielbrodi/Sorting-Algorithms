@@ -49,7 +49,7 @@ void BubbleSort(int *arr, size_t size)
 
 void SelectionSort(int *arr, size_t size)
 {
-		/*
+	/*
 	
 	assert and verify that the given array paramater is valid and not null.
 
@@ -62,17 +62,18 @@ void SelectionSort(int *arr, size_t size)
 
 	size_t sorted_item = 0;    
 	size_t unsorted_item = 0;
-	size_t smallest_value = arr[sorted_item]; # stores index of smallest item
+	size_t smallest_value_index = sorted_item; 
 	
 	while (sorted_item <= size - 1):
 		unsorted_item = sorted_item + 1;
 		
 		while (unsorted_item < size):
-				if (arr[unsorted_item] < arr[smallest_value]):
-					arr[smallest_value] = arr[unsorted_item];
+				if (arr[unsorted_item] < arr[smallest_value_index]):
+					smallest_value_index = unsorted_item;
+					
 				++unsorted_item;
 				
-		arr[sorted_item] = arr[smallest_value];
+		Swap (arr[sorted_item], arr[smallest_value_index]);
 		++sorted_item;
 		
 			
@@ -83,7 +84,31 @@ void SelectionSort(int *arr, size_t size)
 
 void InsertionSort(int *arr, size_t size)
 {
+	/*
+	
+	assert and verify that the given array paramater is valid and not null.
 
+	check if the size of the array is bigger than one. if it's not, do nothing.
+	
+	run through the array and divide it to "sorted" part and "unsorted" part.
+	the sorted part will start from the left of the array.
+	
+	size_t sorted_items = 0;
+	size_t item_to_sort = 0;
+	
+	compare each time the item that should be sorted to the items in the sorted
+	array till it find its right spot.
+	
+	while (sorted_items <= size):
+		item_to_sort = sorted_items + 1;
+		
+		while (item_to_sort > 0 && arr[item_to_sort - 1] > arr[item_to_sort]):
+			Swap (arr[item_to_sort - 1], arr[item_to_sort]);
+			--item_to_sort;
+			
+		++sorted_items;
+		
+	*/
 }
 
 /******************************************************************************/
