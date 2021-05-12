@@ -24,7 +24,7 @@ int main()
 {
 	int arr1[] = {64, 34, 25, 12, 22, 11, 25, 90, 0, -2};
 	int arr2[] = {64, 34, 25, 12, 22, 11, 25, 90, 0, -2};
-/*	int arr3[] = {64, 34, 25, 12, 22, 11, 90};*/
+	int arr3[] = {64, 34, 25, 12, 22, 11, 25, 90, 0, -2};
 
 	size_t n = sizeof(arr1)/sizeof(arr1[0]);
 
@@ -33,7 +33,7 @@ int main()
 
 	BubbleSort(arr1, n);
 	SelectionSort(arr2,n);
-/*	InsertionSort(arr3,n);*/
+	InsertionSort(arr3,n);
 
 
 	printf("Bubble Sort:    ");
@@ -42,8 +42,8 @@ int main()
 	printf("Selection Sort: ");
 	printArray(arr2, n);
 
-/*	printf("Insertion Sort:");*/
-/*	printArray(arr3, n);*/
+	printf("Insertion Sort: ");
+	printArray(arr3, n);
 
 	return 0;
 }
