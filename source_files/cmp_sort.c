@@ -7,108 +7,55 @@
 * Description:		Implementations of sorting algorithms.		 
 \******************************************************************************/
 
+/********************************* Inclusions *********************************/
+#include <assert.h>				/*	assert			*/
+#include <stddef.h>				/*	size_t, NULL	*/
+
+#include "cmp_sort.h"
+
+/**************************** Forward Declarations ****************************/
+/*	swap values of 2 given pointers		*/
+void Swap(int *item_x, int *item_y);
 
 /*************************** Functions Pseudo Codes ***************************/
-
 void BubbleSort(int *arr, size_t size)
 {
-	/*
-	
-	assert and verify that the given array paramater is valid and not null.
-
-	check if the size of the array is bigger than one. if it's not, do nothing.
-
-	size_t sorted_items;    
-	size_t item_to_sort;    
-
-	we want to loop through the array and go on each item and compare it each
-	to a different item until it fines an item with a bigger value.
-
-	sorted_items = 0;    
-
-	item_to_sort = 0; #item_to_sort will always be compared to the next item
-
-	while (sorted_items <= size - 1): 
-	(which means till it reaches the end of the array and finished sorting it)
-	{     
-		item_to_sort = 0;    
-		while (item_to_sort < size - sorted_items - 1):
-		{     
-			loop through all the items and compare each to its next.
-			if (item_to_sort > item_to_sort + 1):
-					Swap them.
-			
-			++item_to_sort;    
-		}    
-	}	
-	++sorted_items; 
-	
-	*/   
-}
-/******************************************************************************/
-
-void SelectionSort(int *arr, size_t size)
-{
-	/*
-	
-	assert and verify that the given array paramater is valid and not null.
-
-	check if the size of the array is bigger than one. if it's not, do nothing.
-	
-	run through the array and divide it to "sorted" part and "unsorted" part.
-	The "sorted" part starts at index 0, promote this index by one.
-	Each iteration will swap the smallest item in the "unsorted" part with
-	the item that currently located at the "sorted" index.
-
-	size_t sorted_item = 0;    
-	size_t unsorted_item = 0;
-	size_t smallest_value_index = sorted_item; 
-	
-	while (sorted_item <= size - 1):
-		unsorted_item = sorted_item + 1;
-		
-		while (unsorted_item < size):
-				if (arr[unsorted_item] < arr[smallest_value_index]):
-					smallest_value_index = unsorted_item;
-					
-				++unsorted_item;
-				
-		Swap (arr[sorted_item], arr[smallest_value_index]);
-		++sorted_item;
-		
-			
-	*/   
-}
-
-/******************************************************************************/
-
-void InsertionSort(int *arr, size_t size)
-{
-	/*
-	
-	assert and verify that the given array paramater is valid and not null.
-
-	check if the size of the array is bigger than one. if it's not, do nothing.
-	
-	run through the array and divide it to "sorted" part and "unsorted" part.
-	the sorted part will start from the left of the array.
-	
-	size_t sorted_items = 0;
+	size_t sorted_items = 0;    
 	size_t item_to_sort = 0;
 	
-	compare each time the item that should be sorted to the items in the sorted
-	array till it find its right spot.
-	
-	while (sorted_items <= size):
-		item_to_sort = sorted_items + 1;
-		
-		while (item_to_sort > 0 && arr[item_to_sort - 1] > arr[item_to_sort]):
-			Swap (arr[item_to_sort - 1], arr[item_to_sort]);
-			--item_to_sort;
+	/*	verify that the given array paramater is valid and not null.		*/
+	assert(arr);
+	/*	do nothing if there are no more than 1 item in the array			*/
+	if (size > 1)
+	{    
+		/*	Loop through the array and compare each item to its next		*/
+		while (sorted_items <= size - 1)
+		{   
+				/*	each loop will compare the items from the beginning		*/
+				item_to_sort = 0;
+				
+				/*	each loop will place the biggest item on the right		*/
+				while (item_to_sort < size - sorted_items - 1)
+				{   
+					/*	compare and swap item with its next if it's bigger	*/
+					if (arr[item_to_sort] > arr[item_to_sort + 1])
+					{
+						Swap(&arr[item_to_sort], &arr[item_to_sort + 1]);
+					}
+					
+					++item_to_sort;    
+				}    
 			
-		++sorted_items;
-		
-	*/
+			++sorted_items; 
+		}	
+	}
 }
+/******************************************************************************/
 
+void Swap(int *item_x, int *item_y)
+{
+    int temp = *item_x;
+    *item_x = *item_y;
+    *item_y = temp;
+}
 /******************************************************************************/
