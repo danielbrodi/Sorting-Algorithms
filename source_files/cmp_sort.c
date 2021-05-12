@@ -96,17 +96,19 @@ void InsertionSort(int *arr, size_t size)
 	size_t sorted_items = 0;    
 	size_t item_to_sort = 0;
 	
-	/*	verify that the given array paramater is valid and not null.		*/
+	/*	verify that the given array paramater  is valid and not null.		*/
 	assert(arr);
 	/*	do nothing if there are no more than 1 item in the array			*/
 	if (size > 1)
 	{    
 	
-		/* iterate through the array from the first unsorted				*/
-		while (sorted_items < size)
+		/*	iterate through the array from the first unsorted item
+			until reaching the biggest item in the array because it gets
+			sorted automatically while the smaller get sorted				*/
+		while (sorted_items < size - 1)
 		{
 			item_to_sort = sorted_items + 1;
-			
+
 			/* compare an item to each of the items on its left				*/
 			/* shift them to the right if the item fits in between them		*/
 			while (item_to_sort > 0 && arr[item_to_sort - 1] > arr[item_to_sort])
