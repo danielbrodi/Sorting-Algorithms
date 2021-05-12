@@ -36,7 +36,7 @@ void BubbleSort(int *arr, size_t size)
 				
 				/*	each loop will place the biggest item on the right		*/
 				while (item_to_sort < size - sorted_items - 1)
-				{   
+				{  
 					/*	compare and swap item with its next if it's bigger	*/
 					if (arr[item_to_sort] > arr[item_to_sort + 1])
 					{
@@ -51,7 +51,44 @@ void BubbleSort(int *arr, size_t size)
 	}
 }
 /******************************************************************************/
-
+void SelectionSort(int *arr, size_t size)
+{
+	size_t sorted_item = 0;    
+	size_t curr_item = 0;
+	size_t smallest_value_index = sorted_item; 
+	
+	/*	verify that the given array paramater is valid and not null.		*/
+	assert(arr);
+	/*	do nothing if there are no more than 1 item in the array			*/
+	if (size > 1)
+	{    
+	
+		/*	divide the array to "sorted" and "unsorted" parts				*/		
+		while (sorted_item <= size - 1)
+		{
+			/*	the unsorted part of the array starts after the sorted		*/
+			curr_item = sorted_item + 1;
+			
+			/* before each iteration set the smallest item as the first		*/
+			smallest_value_index = sorted_item;
+			
+			while (curr_item < size)
+			{
+				/*	set the smallest item as the current one if its smaller	*/
+				if (arr[curr_item] < arr[smallest_value_index])
+				{
+					smallest_value_index = curr_item;
+				}
+					
+				++curr_item;
+			}
+			
+			Swap (&arr[sorted_item], &arr[smallest_value_index]);
+			++sorted_item;
+		}		
+	}
+}
+/******************************************************************************/
 void Swap(int *item_x, int *item_y)
 {
     int temp = *item_x;
