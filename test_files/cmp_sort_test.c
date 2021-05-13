@@ -7,25 +7,23 @@
 \******************************************************************************/
 
 /********************************* Inclusions *********************************/
-#include <stddef.h>	/*	size_t			*/
-#include <stdio.h>	/*	printf			*/
-#include <stdlib.h>	/*	rand, srand		*/
-#include <time.h>	/*	time			*/
+#include <stddef.h>	/*	size_t						*/
+#include <stdio.h>	/*	printf						*/
+#include <stdlib.h>	/*	rand, srand					*/
+#include <time.h>	/*	time						*/
 
-#include "utils.h"	/*	ANSI_COLOR_		*/
+#include "utils.h"	/*	PRINT_COLOR, COLOR			*/
 #include "cmp_sort.h"
 
 /***************************** Macros Definitions *****************************/
-/* print colored output */
-#define PRINT_SUCCESS printf (ANSI_COLOR_GREEN "SUCCESS\n" ANSI_COLOR_RESET)
-#define PRINT_FAILURE printf (ANSI_COLOR_RED "FAILURE\n" ANSI_COLOR_RESET)
-
-/* generates random number from 1 to 100 */
+/* generates random number from -99 to 99 			*/
 #define RANDOM_NUM ((rand() % 200 - 100))	
 
 /**************************** Forward Declarations ****************************/
 static void PrintArray(int arr[], size_t size);
+/* 	Fills up an ints array by random ints			*/
 static void FillUpArray(int *arr, size_t size);
+/*	Copies size values of arr2 items to arr 1 items	*/
 static void CopyArray(int *arr1, int *arr2, size_t size);
 
 /******************************************************************************/
@@ -39,7 +37,7 @@ int main()
 	
 	size_t size = sizeof(arr1)/sizeof(arr1[0]);
 	
-	/*	Intializes a random number generator	*/
+	/*	Intializes a random number generator		*/
 	srand(time(0));
 	
 	FillUpArray(arr1, size);
@@ -47,7 +45,7 @@ int main()
 	CopyArray(arr1, arr2, size);
 	CopyArray(arr1, arr3, size);
 	
-	printf("Original array: ");
+	printf("\nOriginal array: ");
 	PrintArray(arr1, size);
 
 	BubbleSort(arr1, size);
@@ -55,15 +53,20 @@ int main()
 	InsertionSort(arr3,size);
 
 
-	printf("Bubble Sort:    ");
+	PRINT_CYAN;
+	printf("\nBubble Sort:    ");
 	PrintArray(arr1, size);
-
+	
+	PRINT_GREEN;
 	printf("Selection Sort: ");
 	PrintArray(arr2, size);
 
+	PRINT_RED;
 	printf("Insertion Sort: ");
 	PrintArray(arr3, size);
 
+	printf(RESET_COLOR "\n");
+	
 	return 0;
 }
 /******************************************************************************/
