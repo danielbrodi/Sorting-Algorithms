@@ -125,7 +125,10 @@ void InsertionSort(int *arr, size_t size)
 /******************************************************************************/
 static void SwapIntsIMP(int *item_x, int *item_y)
 {
-    int temp = *item_x;
+    int temp = (assert(item_x), *item_x);
+    
+	assert(item_y);
+	
     *item_x = *item_y;
     *item_y = temp;
 }
