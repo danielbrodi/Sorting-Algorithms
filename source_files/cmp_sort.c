@@ -9,13 +9,13 @@
 
 /********************************* Inclusions *********************************/
 #include <assert.h>				/*	assert			*/
-#include <stddef.h>				/*	size_t, NULL	*/
+#include <stddef.h>				/*	size_t			*/
 
 #include "cmp_sort.h"
 
 /**************************** Forward Declarations ****************************/
-/*	swap values of 2 given pointers		*/
-static void Swap(int *item_x, int *item_y);
+/*	swap values of 2 given int pointers		*/
+static void SwapIntsIMP(int *item_x, int *item_y);
 
 /*************************** Functions Pseudo Codes ***************************/
 void BubbleSort(int *arr, size_t size)
@@ -40,7 +40,7 @@ void BubbleSort(int *arr, size_t size)
 					/*	compare and swap item with its next if it's bigger	*/
 					if (arr[item_to_sort] > arr[item_to_sort + 1])
 					{
-						Swap(&arr[item_to_sort], &arr[item_to_sort + 1]);
+						SwapIntsIMP(&arr[item_to_sort], &arr[item_to_sort + 1]);
 					}
 					
 					++item_to_sort;    
@@ -83,7 +83,7 @@ void SelectionSort(int *arr, size_t size)
 				++curr_item;
 			}
 			
-			Swap (&arr[sorted_item], &arr[smallest_value_index]);
+			SwapIntsIMP(&arr[sorted_item], &arr[smallest_value_index]);
 			++sorted_item;
 		}		
 	}
@@ -114,7 +114,7 @@ void InsertionSort(int *arr, size_t size)
 			while (item_to_sort > 0 && arr[item_to_sort - 1] > arr[item_to_sort])
 			{
 				/* swap items' places if the next of an item is smaller		*/
-				Swap (&arr[item_to_sort - 1], &arr[item_to_sort]);
+				SwapIntsIMP(&arr[item_to_sort - 1], &arr[item_to_sort]);
 				--item_to_sort;
 			}
 			
@@ -123,7 +123,7 @@ void InsertionSort(int *arr, size_t size)
 	}
 }
 /******************************************************************************/
-static void Swap(int *item_x, int *item_y)
+static void SwapIntsIMP(int *item_x, int *item_y)
 {
     int temp = *item_x;
     *item_x = *item_y;
