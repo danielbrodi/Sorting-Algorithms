@@ -2,7 +2,7 @@
 * File:				cmp_sort.c						 		  								
 * Author:			Daniel Brodsky					  								
 * Date:				12/05/2021							   								
-* Version:			1.0	(Before Review)		
+* Version:			1.0	(After Review)		
 * Code Reviewer:	Danel						   								
 * Description:		Implementations of sorting algorithms.		 
 \******************************************************************************/
