@@ -15,7 +15,7 @@
 
 /**************************** Forward Declarations ****************************/
 /*	swap values of 2 given pointers		*/
-void Swap(int *item_x, int *item_y);
+static void Swap(int *item_x, int *item_y);
 
 /*************************** Functions Pseudo Codes ***************************/
 void BubbleSort(int *arr, size_t size)
@@ -64,7 +64,7 @@ void SelectionSort(int *arr, size_t size)
 	{    
 	
 		/*	divide the array to "sorted" and "unsorted" parts				*/		
-		while (sorted_item <= size - 1)
+		while (sorted_item < size)
 		{
 			/*	the unsorted part of the array starts after the sorted		*/
 			curr_item = sorted_item + 1;
@@ -123,7 +123,7 @@ void InsertionSort(int *arr, size_t size)
 	}
 }
 /******************************************************************************/
-void Swap(int *item_x, int *item_y)
+static void Swap(int *item_x, int *item_y)
 {
     int temp = *item_x;
     *item_x = *item_y;
