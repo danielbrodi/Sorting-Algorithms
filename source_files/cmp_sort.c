@@ -17,7 +17,7 @@
 /*	swap values of 2 given int pointers		*/
 static void SwapIntsIMP(int *item_x, int *item_y);
 
-/*************************** Functions Pseudo Codes ***************************/
+/************************* Functions  Implementations *************************/
 void BubbleSort(int *arr, size_t size)
 {
 	size_t sorted_items = 0;    
