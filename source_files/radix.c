@@ -37,5 +37,10 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 					ConvertFunc DataToKey, size_t msb, size_t num_of_digits)
 {
 	/*
+		init src and dest arrays, lets call them input[] & output[]:
+			create pair_ty arr of size of num_of_elements * element_size;
+		
+		
+		
 	*/
 }
