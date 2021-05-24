@@ -64,8 +64,6 @@ void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 	}
 }
 /******************************************************************************/
-/* returns non-zero if fail to allocate memory 								*/
-/* space complexity of size O(n) 											*/
 int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size,
 					ConvertFunc DataToKey, size_t msb, size_t num_of_digits)
 {
@@ -122,16 +120,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		return (1);
 	}
 	
-	/*	for each element in src arr: 										*/
-	/*	copy ptr and extracted key to src_pair array using DataToKey		*/
-	while (src)
-	{
-		(*src_pair).key = DataToKey(src);
-		(*src_pair).element = src;
-		
-		src += (char *)element_size;
-		++src_pair;
-	}
+	FIllPairSrcFromSrcIMP(src_pair, src, DataToKey);
 	
 	/*	for num_of_digits: 													*/
 	while (num_of_digits)
@@ -148,8 +137,32 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		--num_of_digits;
 	}
 	
+	FillDestFromPairDestIMP(void *dest, pair_ty *src_pair, element_size);
+	
+	int (0);
+}
+/******************************************************************************/
+void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, ConvertFunc DataToKey)
+{
+	assert (dest && src);
+	assert(DataToKey);
+	
+	/*	for each element in src arr: 										*/
+	/*	copy ptr and extracted key to src_pair array using DataToKey		*/
+	while (src->element)
+	{
+		(*dest).key = DataToKey(src);
+		src_pair->element = src;
+		
+		src += (char *)element_size;
+		++dest;
+	}
+}
+/******************************************************************************/
+void FillDestFromPairDestIMP(void *dest, pair_ty *src, size_t element_size)
+{
+	assert(dest && src);
 	/*	copy src_pair to void* dest											*/
-	/* 	TODO maybe create a func that copies arrays? but they are from different types.. so maybe not 	*/
 	while(src_pair->element)
 	{
 		*dest = (*src_pair).element;
@@ -157,6 +170,5 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		++src_pair;
 		dest += (char *)element_size;
 	}
-	
-	int (0);
 }
+/******************************************************************************/
