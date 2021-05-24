@@ -26,10 +26,12 @@
 void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 							size_t *histogram, size_t from_bit, size_t to_bit)
 {
-	size_t histogram_size = 1 << (to_bit - from_bit);
+	size_t histogram_size = 1;
 	
 	/*	asserts to assure the received parameters are valid				*/
 	assert(dest && src && histogram && num_of_pairs && to_bit);
+	
+	histogram_size <<= (to_bit - from_bit);
 
 	BuildHistogramIMP(src, histogram, num_of_elements, from_bit, to_bit);
 	
