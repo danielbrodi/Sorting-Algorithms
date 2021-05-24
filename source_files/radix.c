@@ -20,24 +20,26 @@
 #define KEY_SIZE (sizeof(size_t))
 
 /**************************** Forward Declarations ****************************/
-
-void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
+/*	Fills up a pairs array by extracting a data key from a given array		*/
+void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
 														ConvertFunc DataToKey);
-
+/*	Fills up a sorted elements array by copying their order from an
+ *	array which sorted them by their data key	 							*/
 void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
 								size_t num_of_elements, size_t element_size);
-
+/*	Creates an histogram of data that located in a specific range of bits
+	of elements in a given array					 						*/
 void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
 												size_t from_bit, size_t to_bit);
-
+/*	Nullifies an histogram array											*/
 void WipeHistogramIMP(size_t *histogram, size_t size);
-
+/*	Sets the value of each element as the cumulative sum of its previous	*/
 void CumulativeSumHistogramIMP(size_t *histogram, size_t size);
-
+/*	Swaps the addresses that being pointed by two pointers with each other	*/
 void SwapPairPointersIMP(pair_ty *ptr1, pair_ty ptr2);
-
-SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs);
-
+/*	Sorts data keys in an array by their histogram 							*/
+void SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs);
+/*	Frees memory that is being used by given arrays							*/
 void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram);
 
 /************************* Functions  Implementations *************************/
@@ -115,7 +117,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		return (1);
 	}
 	
-	FIllPairSrcFromSrcIMP(src_pair, src, num_of_elements, DataToKey);
+	FillPairSrcFromSrcIMP(src_pair, src, num_of_elements, DataToKey);
 	
 	/*	for num_of_digits: 													*/
 	while (num_of_digits)
@@ -144,7 +146,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	return (0);
 }
 /******************************************************************************/
-void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
+void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
 														ConvertFunc DataToKey)
 {
 	assert (dest && src);
@@ -236,7 +238,7 @@ void SwapPairPointersIMP(pair_ty *ptr1, pair_ty ptr2)
 	ptr2 = temp;
 }
 /******************************************************************************/
-SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs)
+void SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs)
 {
 	size_t i = 0;
 	
