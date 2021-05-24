@@ -19,6 +19,27 @@
 
 #define KEY_SIZE (sizeof(size_t))
 
+/**************************** Forward Declarations ****************************/
+
+void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
+														ConvertFunc DataToKey);
+
+void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
+								size_t num_of_elements, size_t element_size);
+
+void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
+												size_t from_bit, size_t to_bit);
+
+void WipeHistogramIMP(size_t *histogram, size_t size);
+
+void CumulativeSumHistogramIMP(size_t *histogram, size_t size);
+
+void SwapPairPointersIMP(pair_ty *ptr1, pair_ty ptr2);
+
+SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs);
+
+void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram);
+
 /************************* Functions  Implementations *************************/
 
 /* sorts by the bits found in range from_bit to to_bit of key 			*/
@@ -50,7 +71,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	
 	/*	histogram's size is the base of the elements which inside of the
 	 *	array that needs to be sorted										*/
-	unsigned int histogram_size = 1;
+	size_t histogram_size = 1;
 	
 	/*	asserts to assure the received parameters are valid					*/
 	assert(dest && src && num_of_elements && num_of_digits && element_size);
@@ -66,7 +87,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	/*	create an histogram array of size of the base of the src elements	*/
 	/*	handle errors if any												*/
 	/*	nullify histogram using calloc										*/
-	histogram = (size_t *)calloc((size_t)histogram_size, sizeof(size_t);
+	histogram = (size_t *)calloc(histogram_size, sizeof(size_t);
 	if (!histogram)
 	{
 		return (NULL);
@@ -183,7 +204,7 @@ void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
 	}
 }
 /******************************************************************************/
-void WipeHistogramIMP(size_t *histogram, unsigned int size)
+void WipeHistogramIMP(size_t *histogram, size_t size)
 {
 	assert(histogram, size);
 	

@@ -28,4 +28,4 @@ void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size,
 					ConvertFunc DataToKey, size_t msb, size_t num_of_digits);
 
-#endif	__RADIX_H__
+ #endif	/*	__RADIX_H__	*/ 
