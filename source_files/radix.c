@@ -7,11 +7,12 @@
 * Version:			1.0   								
 * Description:		Radix sort implementation. 
 \******************************************************************************/
+
 /********************************* Inclusions *********************************/
 
-#include <assert.h>			/*	assert			*/
-#include <stddef.h>			/*	size_t, NULL	*/
-#include <stdlib.h>			/*	malloc, free	*/
+#include <assert.h>			/*	assert					*/
+#include <stddef.h>			/*	size_t, NULL			*/
+#include <stdlib.h>			/*	calloc, malloc, free	*/
 
 #include "radix.h"
 
@@ -53,6 +54,7 @@ void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 	/*	asserts to assure the received parameters are valid					*/
 	assert(dest && src && histogram && num_of_pairs && to_bit);
 	
+	/*	calculates the base of the elements of the histogram				*/
 	histogram_size <<= (to_bit - from_bit);
 
 	BuildHistogramIMP(src, histogram, num_of_pairs, from_bit, to_bit);
@@ -79,9 +81,10 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	assert(dest && src && num_of_elements && num_of_digits && element_size);
 	assert(DataToKey);
 	
-	/* TODO should make RoundUp func to make life easier */
+	/* TODO should make RoundUp func to make life easier and a correct var	*/
+	/*	calculates the base of the elements which are in the array			*/
 	histogram_size = histogram_size << ((msb + 1) / num_of_digits);	
-	/* TODO should make RoundUp func to make life easier and a correct var*/
+	/* TODO should make RoundUp func to make life easier and a correct var	*/
 	to_bit = ((msb + 1) / num_of_digits);	
 	
 	step = to_bit + 1;
