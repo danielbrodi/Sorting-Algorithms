@@ -48,15 +48,16 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	
 	size_t from_bit = 0, to_bit = 0, step = 0;
 	
-	/*	base of the element that needs to be sorted							*/
-	unsigned int base = 1;
+	/*	histogram's size is the base of the elements which inside of the
+	 *	array that needs to be sorted										*/
+	unsigned int histogram_size = 1;
 	
 	/*	asserts to assure the received parameters are valid					*/
 	assert(dest && src && num_of_elements && num_of_digits && element_size);
 	assert(DataToKey);
 	
 	/* TODO should make RoundUp func to make life easier */
-	base = base << ((msb + 1) / num_of_digits);	
+	histogram_size = histogram_size << ((msb + 1) / num_of_digits);	
 	/* TODO should make RoundUp func to make life easier and a correct var*/
 	to_bit = ((msb + 1) / num_of_digits);	
 	
@@ -65,7 +66,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	/*	create an histogram array of size of the base of the src elements	*/
 	/*	handle errors if any												*/
 	/*	nullify histogram using calloc										*/
-	histogram = (size_t *)calloc((size_t)base, sizeof(size_t);
+	histogram = (size_t *)calloc((size_t)histogram_size, sizeof(size_t);
 	if (!histogram)
 	{
 		return (NULL);
@@ -98,7 +99,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	/*	for num_of_digits: 													*/
 	while (num_of_digits)
 	{
-		WipeHistogramIMP(histogram, base);
+		WipeHistogramIMP(histogram, histogram_size);
 		
 		/*	call CountingSortIMP with current subset of bits	*/
 		CountingSortIMP(dest_pair, src_pair, num_of_elements, histogram, 
