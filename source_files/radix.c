@@ -45,12 +45,7 @@ void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 		++histogram[key];
 	}
 	
-	/*	for each index in histogram:									*/
-	for (i = 1; i < histogram_size; ++i)
-	{
-		/*	sum the current value with the value before					*/
-		histogram[i] += histogram[i - 1];
-	}
+	CumulativeSumHistogramIMP(histogram, histogram_size);
 
 	/*	for each key in src (run from the end of the array):			*/
 	for (i = num_of_pairs - 1; i >= 0; --i)
@@ -121,12 +116,15 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	/*	for num_of_digits: 													*/
 	while (num_of_digits)
 	{
-		WipeHistogram(histogram, base);
+		WipeHistogramIMP(histogram, base);
+		
 		/*	call CountingSortIMP with current subset of bits	*/
 		CountingSortIMP(dest_pair, src_pair, num_of_elements, histogram, 
 															from_bit, to_bit);
+															
 		/*	switch src_pair and dest_pair ptrs					*/
 		SwitchPtrs(src_pair, dest_pair);
+		
 		/*	promote bit indexes to next subset					*/
 		from_bit += step;
 		to_bit += step;
@@ -159,6 +157,7 @@ void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, ConvertFunc DataToKey)
 void FillDestFromPairDestIMP(void *dest, pair_ty *src, size_t element_size)
 {
 	assert(dest && src);
+	
 	/*	copy src_pair to void* dest											*/
 	while(src_pair->element)
 	{
@@ -171,6 +170,8 @@ void FillDestFromPairDestIMP(void *dest, pair_ty *src, size_t element_size)
 /******************************************************************************/
 size_t *BuildHistogramIMP(unsigned int size)
 {
+	assert(size > 0);
+	
 	/*	create an histogram array of size of the base of the src elements	*/
 	/*	handle errors if any												*/
 	/*	nullify histogram using calloc										*/
@@ -183,3 +184,23 @@ size_t *BuildHistogramIMP(unsigned int size)
 	return (new_histogram);
 }
 /******************************************************************************/
+void WipeHistogramIMP(size_t *histogram, unsigned int size)
+{
+	assert(histogram);
+	
+	memset(histogram, 0, size);
+}
+/******************************************************************************/
+void CumulativeSumHistogramIMP(size_t *histogram, size_t size)
+{
+	size_t i = 0;
+	
+	assert(histogram, size > 1);
+	
+	/*	for each index in histogram:									*/
+	for (i = 1; i < histogram_size; ++i)
+	{
+		/*	sum the current value with the value before					*/
+		histogram[i] += histogram[i - 1];
+	}
+}
