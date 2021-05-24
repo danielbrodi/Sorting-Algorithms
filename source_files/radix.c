@@ -87,11 +87,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	
 	step = to_bit + 1;
 	
-	/*	create an histogram array of size of the base of the src elements	*/
-	/*	handle errors if any												*/
-	/*	nullify histogram using calloc										*/
-	/* TODO can make a func to make size_t nullified array	*/
-	histogram = (size_t *)calloc((size_t)base, sizeof(size_t);
+	histogram = BuildHistogramIMP(base);
 	if (!histogram)
 	{
 		return (1);
@@ -125,6 +121,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	/*	for num_of_digits: 													*/
 	while (num_of_digits)
 	{
+		WipeHistogram(histogram, base);
 		/*	call CountingSortIMP with current subset of bits	*/
 		CountingSortIMP(dest_pair, src_pair, num_of_elements, histogram, 
 															from_bit, to_bit);
@@ -170,5 +167,19 @@ void FillDestFromPairDestIMP(void *dest, pair_ty *src, size_t element_size)
 		++src_pair;
 		dest += (char *)element_size;
 	}
+}
+/******************************************************************************/
+size_t *BuildHistogramIMP(unsigned int size)
+{
+	/*	create an histogram array of size of the base of the src elements	*/
+	/*	handle errors if any												*/
+	/*	nullify histogram using calloc										*/
+	new_histogram = (size_t *)calloc((size_t)base, sizeof(size_t);
+	if (!histogram)
+	{
+		return (NULL);
+	}
+	
+	return (new_histogram);
 }
 /******************************************************************************/
