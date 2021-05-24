@@ -5,7 +5,7 @@
 * Code Reviewer:
 * Pseudo Reviewer:	Danel					   								
 * Version:			1.0   								
-* Description:		Radix sort algorithm implementation pseudo code. 
+* Description:		Radix sort implementation. 
 \******************************************************************************/
 /********************************* Inclusions *********************************/
 
@@ -16,30 +16,52 @@
 #include "utils.h"
 #include "radix.h"
 
+/******************************* Macros & enums *******************************/
+
+#define KEY_SIZE (sizeof(size_t))
+
 /************************* Functions  Implementations *************************/
 
-/* sorts by the bits found in range from_bit to to_bit of key 				*/
+/* sorts by the bits found in range from_bit to to_bit of key 			*/
 void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 							size_t *histogram, size_t from_bit, size_t to_bit)
 {
-	/*	asserts to assure the received parameters are valid					*/
+	size_t key = 0, i = 0;
+	size_t histogram_size = 1 << (to_bit - from_bit);
+	
+	/*	asserts to assure the received parameters are valid				*/
 	assert(dest && src && histogram && num_of_pairs && to_bit);
 
-/*	for each key in src:													*/
+/*	for each key in src:												*/
 	while (src->element)
 	{
-	/*		"shake" all other bits other than from_bit and to_bit by shifting right and left */
-	/*		incremet the corresponding index in histogram array					*/
-	}
-/*	for each index in histogram:											*/
-/*		sum the current value with the value before							*/
-/*		promote key															*/
-
-/*	for each key in src (run from the end of the array):					*/
-/*		go to corresponding index in histogram array: decrement value		*/
-/*		go to corresponding index to that value in dest array and 
-														insert the pair	*/
+		key = src->key;
+		/*	shift the key to the right and to the left in order to 
+	 	*	leave it only with the range of bits that should be sorted	*/
+		key <<= KEY_SIZE - 1 - to_bit;
+		key >>= KEY_SIZE - 1 - to_bit + from_bit;
 	
+		/*	incremet the corresponding index in histogram array			*/
+		++histogram[key];
+	}
+	
+	/*	for each index in histogram:									*/
+	for (i = 1; i < histogram_size; ++i)
+	{
+		/*	sum the current value with the value before					*/
+		histogram[i] += histogram[i - 1];
+	}
+
+	/*	for each key in src (run from the end of the array):			*/
+	for (i = num_of_pairs - 1; i >= 0; --i)
+	{
+		/*	go to corresponding index in histogram array	*/
+		/* decrement value									*/
+		--(histogram[i]);
+		/*	go to corresponding index to that value  
+		 *	in dest array and insert the pair				*/
+		 dest[histogram[i]] = i;
+	}
 }
 /******************************************************************************/
 /* returns non-zero if fail to allocate memory 								*/
