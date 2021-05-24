@@ -26,26 +26,16 @@
 void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 							size_t *histogram, size_t from_bit, size_t to_bit)
 {
-	size_t i = 0;
 	size_t histogram_size = 1 << (to_bit - from_bit);
 	
 	/*	asserts to assure the received parameters are valid				*/
 	assert(dest && src && histogram && num_of_pairs && to_bit);
 
-	BuildHistogramIMP(src, histogram, from_bit, to_bit);
+	BuildHistogramIMP(src, histogram, num_of_elements, from_bit, to_bit);
 	
 	CumulativeSumHistogramIMP(histogram, histogram_size);
 
-	/*	for each key in src (run from the end of the array):			*/
-	for (i = num_of_pairs - 1; i >= 0; --i)
-	{
-		/*	go to corresponding index in histogram array	*/
-		/* decrement value									*/
-		--(histogram[i]);
-		/*	go to corresponding index to that value  
-		 *	in dest array and insert the pair				*/
-		 dest[histogram[i]] = i;
-	}
+	SortKeysIMP(dest, histogram, num_of_pairs);
 }
 /******************************************************************************/
 int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size,
@@ -81,7 +71,6 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	}
 	
 	/*	create 2 pair_ty arrays, handle errors if any						*/
-	/* TODO can make a func to make pair_ty array	*/
 	src_pair = (pair_ty *)malloc(sizeof(element_size) * num_of_elements);
 	if (!src_pair)
 	{
@@ -103,7 +92,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		return (1);
 	}
 	
-	FIllPairSrcFromSrcIMP(src_pair, src, DataToKey);
+	FIllPairSrcFromSrcIMP(src_pair, src, num_of_elements, DataToKey);
 	
 	/*	for num_of_digits: 													*/
 	while (num_of_digits)
@@ -124,65 +113,75 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		--num_of_digits;
 	}
 	
-	FillDestFromPairDestIMP(void *dest, pair_ty *src_pair, element_size);
+	FillDestFromPairDestIMP(void *dest, pair_ty *src_pair, num_of_elements,
+																element_size);
 	
 	int (0);
 }
 /******************************************************************************/
-void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, ConvertFunc DataToKey)
+void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
+														ConvertFunc DataToKey)
 {
 	assert (dest && src);
 	assert(DataToKey);
 	
-	/*	for each element in src arr: 										*/
-	/*	copy ptr and extracted key to src_pair array using DataToKey		*/
-	while (src->element)
+	/*	for each element in src arr: 									*/
+	/*	copy ptr and extracted key to src_pair array using DataToKey	*/
+	while (num_of_elements)
 	{
 		dest->key = DataToKey(src);
 		src_pair->element = src;
 		
 		src += (char *)element_size;
 		++dest;
+		
+		--num_of_elements;
 	}
 }
 /******************************************************************************/
-void FillDestFromPairDestIMP(void *dest, pair_ty *src, size_t element_size)
+void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
+									size_t num_of_elements, size_t element_size)
 {
 	assert(dest && src);
 	
-	/*	copy src_pair to void* dest											*/
-	while(src_pair->element)
+	/*	copy src_pair to void* dest										*/
+	while(num_of_elements)
 	{
 		*dest = (*src_pair).element;
 		
 		++src_pair;
 		dest += (char *)element_size;
+		
+		--num_of_elements;
 	}
 }
 /******************************************************************************/
-void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t from_bit,
-																size_t to_bit)
+void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
+												size_t from_bit, size_t to_bit)
 {
 	size_t key = 0;
+	
 	assert(src && histogram && to_bit);
 	
-	/*	for each key in src:												*/
-	while (src->element)
+	/*	for each key in src:											*/
+	while (num_of_pairs)
 	{
 		key = src->key;
 		/*	shift the key to the right and to the left in order to 
 	 	*	leave it only with the range of bits that should be sorted	*/
-		key <<= KEY_SIZE - 1 - to_bit;
-		key >>= KEY_SIZE - 1 - to_bit + from_bit;
+		key <<= (KEY_SIZE - 1 - to_bit);
+		key >>= (KEY_SIZE - 1 - to_bit + from_bit);
 	
 		/*	incremet the corresponding index in histogram array			*/
 		++histogram[key];
+		
+		--num_of_pairs;
 	}
 }
 /******************************************************************************/
 void WipeHistogramIMP(size_t *histogram, unsigned int size)
 {
-	assert(histogram);
+	assert(histogram, size);
 	
 	memset(histogram, 0, size);
 }
@@ -201,8 +200,6 @@ void CumulativeSumHistogramIMP(size_t *histogram, size_t size)
 	}
 }
 /******************************************************************************/
-
-/******************************************************************************/
 void SwapPairPointersIMP(pair_ty *ptr1, pair_ty ptr2)
 {
 	pair_ty *temp = NULL;
@@ -212,5 +209,23 @@ void SwapPairPointersIMP(pair_ty *ptr1, pair_ty ptr2)
 	temp = ptr1;
 	ptr1 = ptr2;
 	ptr2 = temp;
+}
+/******************************************************************************/
+SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs)
+{
+	size_t i = 0;
+	
+	assert(dest && histogram && num_of_pairs);
+	
+	/*	for each key in src (run from the end of the array):			*/
+	for (i = num_of_pairs - 1; i >= 0; --i)
+	{
+		/*	go to corresponding index in histogram array				*/
+		/* decrement value												*/
+		--(histogram[i]);
+		/*	go to corresponding index to that value  
+		 *	in dest array and insert the pair							*/
+		 dest[histogram[i]] = i;
+	}
 }
 /******************************************************************************/
