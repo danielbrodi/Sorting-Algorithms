@@ -13,7 +13,6 @@
 #include <stddef.h>			/*	size_t, NULL	*/
 #include <stdlib.h>			/*	malloc, free	*/
 
-#include "utils.h"
 #include "radix.h"
 
 /******************************* Macros & enums *******************************/
@@ -118,7 +117,9 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	FillDestFromPairDestIMP(void *dest, pair_ty *src_pair, num_of_elements,
 																element_size);
 	
-	int (0);
+	FreeAllIMP(src_pair, dest_pair, histogram);
+	
+	return (0);
 }
 /******************************************************************************/
 void FIllPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
@@ -231,3 +232,9 @@ SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs)
 	}
 }
 /******************************************************************************/
+void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram)
+{
+	free(src);
+	free(dest);
+	free(histogram);
+}
