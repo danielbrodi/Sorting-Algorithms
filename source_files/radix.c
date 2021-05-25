@@ -22,27 +22,28 @@
 
 /**************************** Forward Declarations ****************************/
 /*	Fills up a pairs array by extracting a data key from a given array		*/
-void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
-														ConvertFunc DataToKey);
+static void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, 
+								size_t num_of_elements, ConvertFunc DataToKey);
 /*	Fills up a sorted elements array by copying their order from an
  *	array which sorted them by their data key	 							*/
-void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
+static void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
 								size_t num_of_elements, size_t element_size);
 /*	Creates an histogram of data that located in a specific range of bits
 	of elements in a given array					 						*/
-void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
-												size_t from_bit, size_t to_bit);
+static void BuildHistogramIMP(pair_ty *src, size_t *histogram, 
+						size_t num_of_pairs, size_t from_bit, size_t to_bit);
 /*	Nullifies an histogram array											*/
-void WipeHistogramIMP(size_t *histogram, size_t size);
+static void WipeHistogramIMP(size_t *histogram, size_t size);
 /*	Sets the value of each element as the cumulative sum of its previous	*/
-void CumulativeSumHistogramIMP(size_t *histogram, size_t size);
+static void CumulativeSumHistogramIMP(size_t *histogram, size_t size);
 /*	Swaps the addresses that being pointed by two pointers with each other	*/
-void SwapPairPointersIMP(pair_ty *ptr1, pair_ty *ptr2);
+static void SwapPairPointersIMP(pair_ty *ptr1, pair_ty *ptr2);
 /*	Sorts data keys in an array by their histogram 							*/
-void SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs);
+static void SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs);
 /*	Frees memory that is being used by given arrays							*/
-void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram);
-
+static void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram);
+/*	Round up a given number to the nearest multiple of an other number		*/
+static size_t RoundUpIMP(size_t num, size_t multiplation)
 /************************* Functions  Implementations *************************/
 
 /* sorts by the bits found in range from_bit to to_bit of key 				*/
@@ -81,12 +82,11 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	assert(dest && src && num_of_elements && num_of_digits && element_size);
 	assert(DataToKey);
 	
-	/* TODO should make RoundUp func to make life easier and a correct var	*/
-	/*	calculates the base of the elements which are in the array			*/
-	histogram_size = histogram_size << ((msb + 1) / num_of_digits);	
-	/* TODO should make RoundUp func to make life easier and a correct var	*/
-	to_bit = ((msb + 1) / num_of_digits);	
+	to_bit = (RoundUpIMP(msb + 1, num_of_digits) / num_of_digits);
 	
+	/*	calculates the base of the elements which are in the array			*/
+	histogram_size = histogram_size << to_bit;	
+
 	step = to_bit + 1;
 	
 	/*	create an histogram array of size of the base of the src elements	*/
@@ -144,6 +144,9 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	FillDestFromPairDestIMP(dest, src_pair, num_of_elements, element_size);
 	
 	FreeAllIMP(src_pair, dest_pair, histogram);
+	src_pair = NULL;
+	dest_pair = NULL;
+	histogram = NULL;
 	
 	return (0);
 }
@@ -264,3 +267,9 @@ void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram)
 	free(dest);
 	free(histogram);
 }
+/******************************************************************************/
+size_t RoundUpIMP(size_t num, size_t multiplation)
+{
+	return (num + multiplation - 1 - (num + multiplation - 1) % multiplation);
+}
+/******************************************************************************/
