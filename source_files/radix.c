@@ -10,9 +10,9 @@
 
 /********************************* Inclusions *********************************/
 
-#include <assert.h>			/*	assert					*/
-#include <stddef.h>			/*	size_t, NULL			*/
-#include <stdlib.h>			/*	calloc, malloc, free	*/
+#include <assert.h>			/*	assert						*/
+#include <stddef.h>			/*	size_t, NULL				*/
+#include <stdlib.h>			/*	calloc, malloc, free		*/
 
 #include "radix.h"
 
@@ -127,14 +127,14 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	{
 		WipeHistogramIMP(histogram, histogram_size);
 		
-		/*	call CountingSortIMP with current subset of bits	*/
+		/*	call CountingSortIMP with current subset of bits				*/
 		CountingSortIMP(dest_pair, src_pair, num_of_elements, histogram, 
 															from_bit, to_bit);
 															
-		/*	switch src_pair and dest_pair ptrs					*/
+		/*	switch src_pair and dest_pair ptrs								*/
 		SwapPairPointersIMP(src_pair, dest_pair);
 		
-		/*	promote bit indexes to next subset					*/
+		/*	promote bit indexes to next subset								*/
 		from_bit += step;
 		to_bit += step;
 		
@@ -200,11 +200,11 @@ void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
 	{
 		key = src->key;
 		/*	shift the key to the right and to the left in order to 
-	 	*	leave it only with the range of bits that should be sorted	*/
+	 	*	leave it only with the range of bits that should be sorted		*/
 		key <<= (KEY_SIZE - 1 - to_bit);
 		key >>= (KEY_SIZE - 1 - to_bit + from_bit);
 	
-		/*	incremet the corresponding index in histogram array			*/
+		/*	incremet the corresponding index in histogram array				*/
 		++histogram[key];
 		
 		--num_of_pairs;
@@ -227,7 +227,7 @@ void CumulativeSumHistogramIMP(size_t *histogram, size_t size)
 	/*	for each index in histogram:										*/
 	for (i = 1; i < histogram_size; ++i)
 	{
-		/*	sum the current value with the value before					*/
+		/*	sum the current value with the value before						*/
 		histogram[i] += histogram[i - 1];
 	}
 }
@@ -252,11 +252,11 @@ void SortKeysIMP(pair_ty *dest, size_t *histogram, size_t num_of_pairs)
 	/*	for each key in src (run from the end of the array):				*/
 	for (i = num_of_pairs - 1; i >= 0; --i)
 	{
-		/*	go to corresponding index in histogram array				*/
-		/* decrement value												*/
+		/*	go to corresponding index in histogram array					*/
+		/* decrement value													*/
 		--(histogram[i]);
 		/*	go to corresponding index to that value  
-		 *	in dest array and insert the pair							*/
+		 *	in dest array and insert the pair								*/
 		 dest[histogram[i]] = i;
 	}
 }
