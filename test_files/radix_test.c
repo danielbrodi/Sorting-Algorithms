@@ -44,8 +44,8 @@ size_t DataToKey(void *element);
 
 int main()
 {	
-	element_ty students[10] = {0};
-	element_ty sorted_students[10] = {0};
+	element_ty students[5] = {0};
+	element_ty sorted_students[5] = {0};
 	
 	size_t msb = 7;
 	size_t num_of_digits = 2;
@@ -59,7 +59,7 @@ int main()
 	
 	printf(CYAN "\nOriginal arrays: \n\n" RESET_COLOR);
 	PrintArray(students, size, 0);
-	PrintArray(sorted_students, size, 1);
+/*	PrintArray(sorted_students, size, 1);*/
 	
 	if (RadixSort(sorted_students, students, size,
 		 					sizeof(element_ty), DataToKey, msb, num_of_digits))
@@ -71,8 +71,7 @@ int main()
 	
 	PRINT_CYAN;
 	printf("Radix sorted by students grades:\n\n");
-	PrintArray(students, size, 0);
-	PrintArray(sorted_students, size, 1);
+/*	PrintArray(sorted_students, size, 1);*/
 	
 	printf(RESET_COLOR "\n");
 	
@@ -115,6 +114,6 @@ size_t DataToKey(void *element)
 	{
 		return (((element_ty *)element)->grade);
 	}
-	
+	/* TODO debug mode: */
 	return (3);
 }

@@ -15,6 +15,10 @@
 #include <stdlib.h>			/*	calloc, malloc, free		*/
 #include <string.h>			/*	memset						*/
 #include <limits.h>			/*	memset						*/
+/* ONLY IN DEBUG: */
+#include <stdio.h> /* printf */
+
+#include "utils.h"
 #include "radix.h"
 
 /******************************* Macros & enums *******************************/
@@ -46,24 +50,51 @@ static void FreeAllIMP(pair_ty *src, pair_ty *dest, size_t *histogram);
 /*	Round up a given number to the nearest multiple of an other number		*/
 static size_t RoundUpIMP(size_t num, size_t multiplation);
 /************************* Functions  Implementations *************************/
-
+/*---------------------------DEBUG_START_ TODO--------------------------------*/
+void PrintPairs(pair_ty *arr, size_t size)
+{
+	while (size > 0)
+	{
+		printf("KEY: %ld ", arr->key);
+		++arr;
+		--size;
+	}
+}
+/*---------------------------DEBUG_END_ TODO----------------------------------*/
 /* sorts by the bits found in range from_bit to to_bit of key 				*/
 void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 							size_t *histogram, size_t from_bit, size_t to_bit)
 {
 	size_t histogram_size = 1;
-	
+	size_t backup = 3;
 	/*	asserts to assure the received parameters are valid					*/
 	assert(dest && src && histogram && num_of_pairs && to_bit);
 	
 	/*	calculates the base of the elements of the histogram				*/
 	histogram_size <<= (to_bit - from_bit);
 
-	BuildHistogramIMP(src, histogram, num_of_pairs, from_bit, to_bit);
-	
-	CumulativeSumHistogramIMP(histogram, histogram_size);
+	printf(YELLOW "\nHISTOGRAM SIZE IN COUNTING SORT: %ld\n" RESET_COLOR, histogram_size);
 
+	BuildHistogramIMP(src, histogram, num_of_pairs, from_bit, to_bit);
+	backup = histogram_size;
+	printf(GREEN "HISTOGRAM:\n" RESET_COLOR);
+	while (backup)
+	{
+		printf("INDEX: %ld, KEY: %ld\n", histogram_size-backup, histogram[histogram_size-backup]);
+		--backup;
+	}
+	backup = histogram_size;
+	CumulativeSumHistogramIMP(histogram, histogram_size);
+	backup = histogram_size;
+	printf(YELLOW "HISTOGRAM AFTER CUMULATIVESUM:\n" RESET_COLOR);
+	while (backup)
+	{
+		printf(YELLOW "INDEX: %ld, KEY: %ld\n" RESET_COLOR, histogram_size-backup, histogram[histogram_size-backup]);
+		--backup;
+	}
 	SortKeysIMP(dest, histogram, num_of_pairs);
+	printf(CYAN "DEST AFTER SORT KEYS:\n" RESET_COLOR);
+	PrintPairs(dest, num_of_pairs);
 }
 /******************************************************************************/
 int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size,
@@ -77,7 +108,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	
 	/*	histogram's size is the base of the elements which inside of the
 	 *	array that needs to be sorted										*/
-	size_t histogram_size = 1;
+	size_t histogram_size = 1, backup = 0;	
 	
 	/*	asserts to assure the received parameters are valid					*/
 	assert(dest && src && num_of_elements && num_of_digits && element_size);
@@ -109,7 +140,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		return (1);
 	}
 	
-	dest_pair = (pair_ty *)malloc(sizeof(src_pair));
+	dest_pair = (pair_ty *)malloc(sizeof(pair_ty) * num_of_elements);
 	if (!dest_pair)
 	{
 		free(src_pair);
@@ -125,10 +156,24 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 																	DataToKey);
 	
 	/*	for num_of_digits: 													*/
+	/*		ONLY IN DEBUG TODO*/
+	printf(RED "\n\n BEFORE COUNTING SORT: \n\n" RESET_COLOR);
+	printf(CYAN "\nDest Pair:\n" RESET_COLOR);
+		PrintPairs(dest_pair, num_of_elements);
+		printf(CYAN "\nSRC Pair:\n" RESET_COLOR);
+		PrintPairs(src_pair, num_of_elements);
+	printf(YELLOW "\nHISTOGRAM SIZE: %ld\n\n" RESET_COLOR, histogram_size);
+	printf(RED "\n\n AFTER COUNTING SORT: \n\n" RESET_COLOR);
 	while (num_of_digits)
 	{
 		WipeHistogramIMP(histogram, histogram_size);
-		
+		backup = histogram_size;
+	printf(YELLOW "\nHISTOGRAM AFTER WIPE:\n" RESET_COLOR);
+	while (backup)
+	{
+		printf(GREEN "INDEX: %ld, KEY: %ld\n" RESET_COLOR, histogram_size-backup, histogram[histogram_size-backup]);
+		--backup;
+	}
 		/*	call CountingSortIMP with current subset of bits				*/
 		CountingSortIMP(dest_pair, src_pair, num_of_elements, histogram, 
 															from_bit, to_bit);
@@ -141,6 +186,12 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 		to_bit += step;
 		
 		--num_of_digits;
+		/*		ONLY IN DEBUG TODO*/
+		printf(RED "\n\n BEFORE COUNTING SORT: \n\n" RESET_COLOR);
+		printf(CYAN "\nDest Pair:\n" RESET_COLOR);
+		PrintPairs(dest_pair, num_of_elements);
+		printf(CYAN "\nSRC Pair:\n" RESET_COLOR);
+		PrintPairs(src_pair, num_of_elements);
 	}
 	
 	FillDestFromPairDestIMP(dest, src_pair, num_of_elements, element_size);
@@ -158,7 +209,11 @@ void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
 {
 	assert(dest && src);
 	assert(DataToKey);
-	
+/*	TODO ONLY IN DEBUG*/
+	printf("\nSTART OF FillPairSrcFromSrcIMP\n");
+	PrintPairs(dest, num_of_elements);
+	pair_ty *backups = dest;
+	size_t backup = num_of_elements;
 	/*	for each element in src arr: 										*/
 	/*	copy ptr and extracted key to src_pair array using DataToKey		*/
 	while (num_of_elements)
@@ -171,6 +226,9 @@ void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
 		
 		--num_of_elements;
 	}
+	/*	TODO ONLY IN DEBUG*/
+	printf("\nEND OF FillPairSrcFromSrcIMP\n");
+	PrintPairs(backups, backup);
 }
 /******************************************************************************/
 void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
