@@ -1,8 +1,112 @@
 /*********************************FILE__HEADER*********************************\
-* File:				radix.c
+* File:				radix_test.c
 * Author:			Daniel Brodsky				 		  												  								
 * Date:				23/05/2021
 * Code Reviewer:					   								
 * Version:			1.0   								
 * Description:		Radix sort algorithm implementation tests file. 
 \******************************************************************************/
+
+/********************************* Inclusions *********************************/
+
+#include <stddef.h>	/*	size_t						*/
+#include <stdio.h>	/*	printf						*/
+#include <stdlib.h>	/*	rand, srand					*/
+#include <time.h>	/*	time						*/
+
+#include "utils.h"	/*	PRINT_COLOR, COLOR			*/
+#include "radix.h"
+
+/***************************** Macros Definitions *****************************/
+
+/* generates random number from 0 to 100 			*/
+#define RANDOM_NUM ((rand() % 100) + 1)	
+
+/**************************** Structs  Definitions ****************************/
+
+typedef struct student
+{
+	char *name;
+	size_t id;
+	size_t grade;
+}element_ty;
+
+/**************************** Forward Declarations ****************************/
+
+/* 	Fills up an ints array by random ints			*/
+static void FillUpArray(element_ty *arr, size_t size);
+
+static void PrintArray(element_ty arr[], size_t size);
+
+size_t DataToKey(void *element);
+/******************************************************************************/
+/******************************* Main__Function *******************************/
+
+int main()
+{	
+	element_ty students[10] = {0};
+	element_ty sorted_students[10] = {0};
+	size_t msb = sizeof(size_t) - 1;
+	size_t num_of_digits = 3; /* could be 100	*/
+	
+	size_t size = sizeof(students)/sizeof(element_ty);
+	
+	/*	Intializes a random number generator		*/
+	srand(time(0));
+	
+	FillUpArray(students, size);
+	
+	printf("\nOriginal arrays: ");
+	PrintArray(students, size);
+	PrintArray(sorted_students, size);
+	
+	if (!RadixSort(sorted_students, students, size,
+		 				sizeof(element_ty), DataToKey, msb, num_of_digits))
+	{
+		PRINT_RED;
+		printf("ERROR WITH RadixSort");
+		return (1);
+	}
+	
+	PRINT_CYAN;
+	printf("Radix sorted by students grades:");
+	PrintArray(sorted_students, size);
+	
+	printf(RESET_COLOR "\n");
+	
+	return (0);
+}
+/******************************************************************************/
+static void PrintArray(element_ty arr[], size_t size)
+{
+	size_t i = 0;
+	
+	for (i = 0; i < size; ++i)
+	{
+		printf("%ld ", arr[i].grade);
+	}
+	
+	printf("\n");
+}
+/******************************************************************************/
+static void FillUpArray(element_ty *arr, size_t size) 
+{
+	size_t i = 0;
+	
+	for (i = 0; i < size; ++i)
+	{
+		arr[i].name = "UncleBen";
+		arr[i].id = RANDOM_NUM;
+		arr[i].grade = RANDOM_NUM;
+	}
+}
+/******************************************************************************/
+size_t DataToKey(void *element)
+{
+	if (element)
+	{
+		return (((element_ty *)element)->grade);
+	}
+	
+	return (0);
+}
