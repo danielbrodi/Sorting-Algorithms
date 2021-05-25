@@ -80,7 +80,10 @@ int main()
 static void PrintArray(element_ty arr[], size_t size)
 {
 	size_t i = 0;
-	printf(GREEN "Students:\n\n" RESET_COLOR);
+	static int is_sorted = 0;
+	
+	is_sorted ? printf(GREEN "Sorted Students:\n\n" RESET_COLOR) : 
+							printf(GREEN "Unsorted Students:\n\n" RESET_COLOR);
 	for (i = 0; i < size; ++i)
 	{
 		printf(CYAN "Order: " RESET_COLOR "%ld\n\
@@ -90,6 +93,7 @@ static void PrintArray(element_ty arr[], size_t size)
 				\n", i, arr[i].name, arr[i].id, arr[i].grade);
 	}
 	
+	is_sorted = !is_sorted;
 	printf("\n");
 }
 /******************************************************************************/
