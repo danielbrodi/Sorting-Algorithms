@@ -36,7 +36,7 @@ typedef struct student
 /* 	Fills up an ints array by random ints			*/
 static void FillUpArray(element_ty *arr, size_t size);
 
-static void PrintArray(element_ty arr[], size_t size);
+static void PrintArray(element_ty arr[], size_t size, int is_sorted);
 
 size_t DataToKey(void *element);
 /******************************************************************************/
@@ -46,8 +46,9 @@ int main()
 {	
 	element_ty students[10] = {0};
 	element_ty sorted_students[10] = {0};
-	size_t msb = sizeof(size_t) - 1;
-	size_t num_of_digits = 3; /* could be 100	*/
+	
+	size_t msb = 7;
+	size_t num_of_digits = 2;
 	
 	size_t size = sizeof(students)/sizeof(element_ty);
 	
@@ -57,11 +58,11 @@ int main()
 	FillUpArray(students, size);
 	
 	printf(CYAN "\nOriginal arrays: \n\n" RESET_COLOR);
-	PrintArray(students, size);
-	PrintArray(sorted_students, size);
+	PrintArray(students, size, 0);
+	PrintArray(sorted_students, size, 1);
 	
-	if (!RadixSort(sorted_students, students, size,
-		 				sizeof(element_ty), DataToKey, msb, num_of_digits))
+	if (RadixSort(sorted_students, students, size,
+		 					sizeof(element_ty), DataToKey, msb, num_of_digits))
 	{
 		PRINT_RED;
 		printf("ERROR WITH RadixSort");
@@ -69,19 +70,19 @@ int main()
 	}
 	
 	PRINT_CYAN;
-	printf("Radix sorted by students grades:");
-	PrintArray(sorted_students, size);
+	printf("Radix sorted by students grades:\n\n");
+	PrintArray(students, size, 0);
+	PrintArray(sorted_students, size, 1);
 	
 	printf(RESET_COLOR "\n");
 	
 	return (0);
 }
 /******************************************************************************/
-static void PrintArray(element_ty arr[], size_t size)
+static void PrintArray(element_ty arr[], size_t size, int is_sorted)
 {
 	size_t i = 0;
-	static int is_sorted = 0;
-	
+		
 	is_sorted ? printf(GREEN "Sorted Students:\n\n" RESET_COLOR) : 
 							printf(GREEN "Unsorted Students:\n\n" RESET_COLOR);
 	for (i = 0; i < size; ++i)
@@ -93,7 +94,6 @@ static void PrintArray(element_ty arr[], size_t size)
 				\n", i, arr[i].name, arr[i].id, arr[i].grade);
 	}
 	
-	is_sorted = !is_sorted;
 	printf("\n");
 }
 /******************************************************************************/

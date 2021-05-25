@@ -14,7 +14,7 @@
 #include <stddef.h>			/*	size_t, NULL				*/
 #include <stdlib.h>			/*	calloc, malloc, free		*/
 #include <string.h>			/*	memset						*/
-
+#include <limits.h>			/*	memset						*/
 #include "radix.h"
 
 /******************************* Macros & enums *******************************/
@@ -203,12 +203,12 @@ void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
 		key = src->key;
 		/*	shift the key to the right and to the left in order to 
 	 	*	leave it only with the range of bits that should be sorted		*/
-		key <<= (KEY_SIZE - 1 - to_bit);
-		key >>= (KEY_SIZE - 1 - to_bit + from_bit);
+		key <<= (KEY_SIZE * (CHAR_BIT) - 1 - to_bit);
+		key >>= (KEY_SIZE * (CHAR_BIT) - 1 - to_bit + from_bit);
 	
 		/*	incremet the corresponding index in histogram array				*/
 		++histogram[key];
-		
+		++src;
 		--num_of_pairs;
 	}
 }
