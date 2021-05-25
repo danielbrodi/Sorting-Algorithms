@@ -19,7 +19,7 @@
 
 /***************************** Macros Definitions *****************************/
 
-/* generates random number from 0 to 100 			*/
+/* generates random number from 1 to 100 			*/
 #define RANDOM_NUM ((rand() % 100) + 1)	
 
 /**************************** Structs  Definitions ****************************/
@@ -56,7 +56,7 @@ int main()
 	
 	FillUpArray(students, size);
 	
-	printf("\nOriginal arrays: ");
+	printf(CYAN "\nOriginal arrays: \n\n" RESET_COLOR);
 	PrintArray(students, size);
 	PrintArray(sorted_students, size);
 	
@@ -80,10 +80,14 @@ int main()
 static void PrintArray(element_ty arr[], size_t size)
 {
 	size_t i = 0;
-	
+	printf(GREEN "Students:\n\n" RESET_COLOR);
 	for (i = 0; i < size; ++i)
 	{
-		printf("%ld ", arr[i].grade);
+		printf(CYAN "Order: " RESET_COLOR "%ld\n\
+				"PURPLE "Name: " RESET_COLOR "%s\n\
+				"BLUE "ID: " RESET_COLOR  "%ld\n\
+				"YELLOW "Grade: " RESET_COLOR  "%ld\n\
+				\n", i, arr[i].name, arr[i].id, arr[i].grade);
 	}
 	
 	printf("\n");
@@ -95,7 +99,7 @@ static void FillUpArray(element_ty *arr, size_t size)
 	
 	for (i = 0; i < size; ++i)
 	{
-		arr[i].name = "UncleBen";
+		arr[i].name = "Uncle Ben";
 		arr[i].id = RANDOM_NUM;
 		arr[i].grade = RANDOM_NUM;
 	}
@@ -108,5 +112,5 @@ size_t DataToKey(void *element)
 		return (((element_ty *)element)->grade);
 	}
 	
-	return (0);
+	return (3);
 }
