@@ -71,7 +71,7 @@ int main()
 	
 	PRINT_CYAN;
 	printf("Radix sorted by students grades:\n\n");
-/*	PrintArray(sorted_students, size, 1);*/
+	PrintArray(sorted_students, size, 1);
 	
 	printf(RESET_COLOR "\n");
 	
