@@ -82,7 +82,7 @@ static void PrintArray(element_ty arr[], size_t size, int is_sorted)
 				"PURPLE "Name: " RESET_COLOR "%s\n\
 				"BLUE "ID: " RESET_COLOR  "%ld\n\
 				"YELLOW "Grade: " RESET_COLOR  "%ld\n\
-				\n", i, arr[i].name, arr[i].id, arr[i].grade);
+				\n", i+1, arr[i].name, arr[i].id, arr[i].grade);
 	}
 	
 	printf("\n");
