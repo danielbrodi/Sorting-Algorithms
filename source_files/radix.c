@@ -14,7 +14,7 @@
 #include <stddef.h>			/*	size_t, NULL				*/
 #include <stdlib.h>			/*	calloc, malloc, free		*/
 #include <string.h>			/*	memset						*/
-#include <limits.h>			/*	memset						*/
+#include <limits.h>			/*	CHAR_BIT					*/
 /* ONLY IN DEBUG: */
 #include <stdio.h> /* printf */
 
