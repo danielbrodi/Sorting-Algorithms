@@ -53,8 +53,8 @@ static size_t RoundUpIMP(size_t num, size_t multiplation);
 /*---------------------------DEBUG_START_ TODO--------------------------------*/
 void PrintPairs(pair_ty *arr, size_t size, int is_dest)
 {
-	is_dest ? printf(BLACK "Printing DEST Pair: \n" RESET_COLOR) :
-						printf(BLACK "Printing SRC Pair: \n" RESET_COLOR);
+	is_dest ? printf(GREEN "Printing DEST Pair: \n" RESET_COLOR) :
+						printf(YELLOW "Printing SRC Pair: \n" RESET_COLOR);
 	PRINT_YELLOW;
 	while (size)
 	{
@@ -68,7 +68,7 @@ void PrintPairs(pair_ty *arr, size_t size, int is_dest)
 void PrintHistogram(size_t *histogram, size_t size)
 {
 	size_t backup = size;
-	printf(BLACK "Printing Histogram: \n" RESET_COLOR);
+	printf(GREEN "Printing Histogram: \n" RESET_COLOR);
 	
 	PRINT_YELLOW;
 	
@@ -92,7 +92,7 @@ void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 	assert(dest && src && histogram && num_of_pairs && to_bit);
 	
 	/*	calculates the base of the elements of the histogram				*/
-	histogram_size <<= (to_bit - from_bit);
+	histogram_size <<= (to_bit - from_bit + 1);
 
 	printf(YELLOW "\nHISTOGRAM SIZE IN COUNTING SORT: %ld\n" RESET_COLOR, histogram_size);
 
@@ -125,7 +125,7 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	
 	size_t *histogram = NULL;
 	
-	size_t from_bit = 0, to_bit = 0, step = 0;
+	size_t from_bit = 0, to_bit = 0, step = 0, RoundedMSB = 0;
 	
 	/*	histogram's size is the base of the elements which inside of the
 	 *	array that needs to be sorted										*/
@@ -135,12 +135,16 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	assert(dest && src && num_of_elements && num_of_digits && element_size);
 	assert(DataToKey);
 	
-	to_bit = (RoundUpIMP(msb + 1, num_of_digits) / num_of_digits);
+	RoundedMSB = RoundUpIMP(msb, num_of_digits);
+	printf("RoundedMSB: %ld", RoundedMSB);
+	
+	to_bit = (RoundedMSB / num_of_digits) - 1;
+
+	step = (to_bit - from_bit) + 1;
 	
 	/*	calculates the base of the elements which are in the array			*/
-	histogram_size = histogram_size << to_bit;	
-
-	step = to_bit - from_bit;
+	histogram_size = histogram_size << step;	
+	
 	PRINT_YELLOW;
 	printf("to_bit : %ld, step: %ld, from_bit; %ld\n", to_bit, step, from_bit);
 	RESET_PRINT_COLOR;
@@ -262,6 +266,7 @@ void FillDestFromPairDestIMP(void *dest, pair_ty *src,
 	/*	copy src_pair to void* dest											*/
 	while(num_of_elements)
 	{
+		printf(RED "DEST: %p , SRC: %p\n" RESET_COLOR, dest, src->element);
 		memcpy(dest, src->element, element_size);
 		
 		dest = (char *)dest + element_size;
