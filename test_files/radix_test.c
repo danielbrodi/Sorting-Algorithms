@@ -1,9 +1,8 @@
 /*********************************FILE__HEADER*********************************\
 * File:				radix_test.c
 * Author:			Daniel Brodsky				 		  												  								
-* Date:				23/05/2021
-* Code Reviewer:					   								
-* Version:			1.0   								
+* Date:				23/05/2021				   								
+* Version:			1.2 								
 * Description:		Radix sort algorithm implementation tests file. 
 \******************************************************************************/
 
@@ -57,24 +56,17 @@ int main()
 	
 	FillUpArray(students, size);
 	
-	printf(CYAN "\nOriginal arrays: \n\n" RESET_COLOR);
 	PrintArray(students, size, 0);
-/*	PrintArray(sorted_students, size, 1);*/
 	
 	if (RadixSort(sorted_students, students, size,
 		 					sizeof(element_ty), DataToKey, msb, num_of_digits))
 	{
-		PRINT_RED;
-		printf("ERROR WITH RadixSort");
+		printf(RED "ERROR WITH RadixSort" RESET_COLOR);
 		return (1);
 	}
 	
-	PRINT_CYAN;
-	printf("Radix sorted by students grades:\n\n");
 	PrintArray(sorted_students, size, 1);
-	
-	printf(RESET_COLOR "\n");
-	
+
 	return (0);
 }
 /******************************************************************************/
@@ -82,8 +74,8 @@ static void PrintArray(element_ty arr[], size_t size, int is_sorted)
 {
 	size_t i = 0;
 		
-	is_sorted ? printf(GREEN "Sorted Students:\n\n" RESET_COLOR) : 
-							printf(GREEN "Unsorted Students:\n\n" RESET_COLOR);
+	is_sorted ? printf(GREEN "Radix sorted students by grade:\n\n" RESET_COLOR): 
+						printf(GREEN "\nUnsorted students:\n\n" RESET_COLOR);
 	for (i = 0; i < size; ++i)
 	{
 		printf(CYAN "Order: " RESET_COLOR "%ld\n\
@@ -99,10 +91,11 @@ static void PrintArray(element_ty arr[], size_t size, int is_sorted)
 static void FillUpArray(element_ty *arr, size_t size) 
 {
 	size_t i = 0;
-	
+	char *names[5] = {"Peter Parker", "Uncle Ben", "Mary Jane", "Aunt May",
+																"Harry Osborn"};
 	for (i = 0; i < size; ++i)
 	{
-		arr[i].name = "Uncle Ben";
+		arr[i].name = names[i];
 		arr[i].id = RANDOM_NUM;
 		arr[i].grade = RANDOM_NUM;
 	}
@@ -114,6 +107,8 @@ size_t DataToKey(void *element)
 	{
 		return (((element_ty *)element)->grade);
 	}
-	/* TODO debug mode: */
-	return (3);
+	
+	printf(RED "ERROR - DataToKey" RESET_COLOR);
+	return(-1);
 }
+/******************************************************************************/

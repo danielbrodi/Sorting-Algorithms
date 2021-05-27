@@ -13,11 +13,7 @@
 /* a function to extract a sub-element 							*/
 typedef size_t (*ConvertFunc)(void *element);
 
-typedef struct pair
-{
-	size_t key;
-	void *element;
-}pair_ty;
+typedef struct pair pair_ty;
 
 /* sorts by the bits found in range from_bit to to_bit of key 	*/
 void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
