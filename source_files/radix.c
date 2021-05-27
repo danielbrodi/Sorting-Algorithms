@@ -269,14 +269,15 @@ void SwapPairPointersIMP(pair_ty **ptr1, pair_ty **ptr2)
 {
 	pair_ty *temp = NULL;
 	
-	assert(ptr1 && ptr2);
+	assert(*ptr1 && *ptr2);
 	
 	temp = *ptr1;
 	*ptr1 = *ptr2;
 	*ptr2 = temp;
 }
 /******************************************************************************/
-void SortKeysIMP(pair_ty *dest, pair_ty *src, size_t *histogram, size_t num_of_pairs, size_t from_bit, size_t to_bit)
+void SortKeysIMP(pair_ty *dest, pair_ty *src, size_t *histogram,
+							size_t num_of_pairs, size_t from_bit, size_t to_bit)
 {
 	int i = 0, pairs = (int)num_of_pairs;
 	
@@ -287,6 +288,7 @@ void SortKeysIMP(pair_ty *dest, pair_ty *src, size_t *histogram, size_t num_of_p
 	for (i = pairs - 1; i >= 0; --i)
 	{
 		key = src[i].key;
+		
 		/*	shift the key to the right and to the left in order to 
 	 	*	leave it only with the range of bits that should be sorted		*/
 		key <<= (KEY_SIZE * (CHAR_BIT) - 1 - to_bit);
