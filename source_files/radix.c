@@ -29,13 +29,18 @@ enum
 
 /**************************** Structs  Definitions ****************************/
 
-struct pair
+/*	define the structure of each element in an array of pairs				*/
+typedef struct pair
 {
 	size_t key;
 	void *element;
-};
+}pair_ty;
 
 /**************************** Forward Declarations ****************************/
+
+/* sorts by the bits found in range from_bit to to_bit of key 				*/
+void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
+							size_t *histogram, size_t from_bit, size_t to_bit);
 
 /*	Fills up a pairs array by extracting a data key from a given array		*/
 static void FillPairSrcFromSrcIMP(pair_ty *dest, void *src,
@@ -72,25 +77,6 @@ static size_t RoundUpIMP(size_t num, size_t multiplation);
 
 /************************* Functions  Implementations *************************/
 
-/* sorts by the bits found in range from_bit to to_bit of key 				*/
-void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
-							size_t *histogram, size_t from_bit, size_t to_bit)
-{
-	size_t histogram_size = 1;
-
-	/*	asserts to assure the received parameters are valid					*/
-	assert(dest && src && histogram && num_of_pairs && to_bit);
-	
-	/*	calculates the base of the elements which need to be sorted			*/
-	histogram_size <<= (to_bit - from_bit + 1);
-
-	BuildHistogramIMP(src, histogram, num_of_pairs, from_bit, to_bit);
-	
-	CumulativeSumHistogramIMP(histogram, histogram_size);
-	
-	SortKeysIMP(dest, src, histogram, num_of_pairs, from_bit, to_bit);
-}
-/******************************************************************************/
 int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size,
 					ConvertFunc DataToKey, size_t msb, size_t num_of_digits)
 {
@@ -105,7 +91,11 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	size_t histogram_size = 1;	
 	
 	/*	asserts to assure the received parameters are valid					*/
-	assert(dest && src && num_of_elements && num_of_digits && element_size);
+	assert(dest);
+	assert(src);
+	assert(num_of_elements);
+	assert(num_of_digits);
+	assert(element_size);
 	assert(DataToKey);
 	
 	RoundedMSB = RoundUpIMP(msb, num_of_digits);
@@ -183,10 +173,33 @@ int RadixSort(void *dest, void *src, size_t num_of_elements, size_t element_size
 	return (0);
 }
 /******************************************************************************/
+void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
+							size_t *histogram, size_t from_bit, size_t to_bit)
+{
+	size_t histogram_size = 1;
+
+	/*	asserts to assure the received parameters are valid					*/
+	assert(dest);
+	assert(src);
+	assert(histogram);
+	assert(num_of_pairs);
+	assert(to_bit);
+	
+	/*	calculates the base of the elements which need to be sorted			*/
+	histogram_size <<= (to_bit - from_bit + 1);
+
+	BuildHistogramIMP(src, histogram, num_of_pairs, from_bit, to_bit);
+	
+	CumulativeSumHistogramIMP(histogram, histogram_size);
+	
+	SortKeysIMP(dest, src, histogram, num_of_pairs, from_bit, to_bit);
+}
+/******************************************************************************/
 void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
 									size_t element_size, ConvertFunc DataToKey)
 {
-	assert(dest && src);
+	assert(dest);
+	assert(src);
 	assert(DataToKey);
 
 	/*	for each element in src arr: 										*/
@@ -206,7 +219,8 @@ void FillPairSrcFromSrcIMP(pair_ty *dest, void *src, size_t num_of_elements,
 void FillDestFromPairDestIMP(void *dest, pair_ty *src, 
 									size_t num_of_elements, size_t element_size)
 {
-	assert(dest && src);
+	assert(dest);
+	assert(src);
 	
 	/*	copy src_pair to void* dest											*/
 	while(num_of_elements)
@@ -225,7 +239,9 @@ void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
 {
 	size_t key = 0;
 	
-	assert(src && histogram && to_bit);
+	assert(src);
+	assert(histogram);
+	assert(to_bit);
 	
 	/*	for each key in src:												*/
 	while (num_of_pairs)
@@ -246,7 +262,8 @@ void BuildHistogramIMP(pair_ty *src, size_t *histogram, size_t num_of_pairs,
 /******************************************************************************/
 void WipeHistogramIMP(size_t *histogram, size_t size)
 {
-	assert(histogram && size);
+	assert(histogram);
+	assert(size);
 	
 	memset(histogram, 0, size * sizeof(size_t));
 }
@@ -255,7 +272,8 @@ void CumulativeSumHistogramIMP(size_t *histogram, size_t size)
 {
 	size_t i = 0;
 	
-	assert(histogram && size > 1);
+	assert(histogram);
+	assert(size > 1);
 	
 	/*	for each index in histogram:										*/
 	for (i = 1; i < size; ++i)
@@ -269,7 +287,8 @@ void SwapPairPointersIMP(pair_ty **ptr1, pair_ty **ptr2)
 {
 	pair_ty *temp = NULL;
 	
-	assert(*ptr1 && *ptr2);
+	assert(*ptr1);
+	assert(*ptr2);
 	
 	temp = *ptr1;
 	*ptr1 = *ptr2;
@@ -282,7 +301,12 @@ void SortKeysIMP(pair_ty *dest, pair_ty *src, size_t *histogram,
 	int i = 0, pairs = (int)num_of_pairs;
 	
 	size_t key = 0;
-	assert(dest && histogram && num_of_pairs);
+	
+	assert(src);
+	assert(dest);
+	assert(histogram);
+	assert(num_of_pairs);
+	assert(to_bit);
 	
 	/*	for each key in src (run from the end of the array):				*/
 	for (i = pairs - 1; i >= 0; --i)
