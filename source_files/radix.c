@@ -39,7 +39,7 @@ typedef struct pair
 /**************************** Forward Declarations ****************************/
 
 /* sorts by the bits found in range from_bit to to_bit of key 				*/
-void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
+static void CountingSortIMP(pair_ty *dest, pair_ty *src, size_t num_of_pairs,
 							size_t *histogram, size_t from_bit, size_t to_bit);
 
 /*	Fills up a pairs array by extracting a data key from a given array		*/
