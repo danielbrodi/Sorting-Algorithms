@@ -31,12 +31,12 @@ int *BinarySearchIter(const int SortedArray[], int query, size_t length)
 {
 	/*	asserts*/
 	/*	*/
-	/*	go to the middle of the array*/
+	/*	go to the middle of the array sorted_arr[length/2] */
 	/*	return if equals to query*/
 	/*	if not:*/
 	/*		while value in the array is not equal to query:*/
 	/*			if query is smaller than the value in the array:*/
-	/*				move to the middle of the left side and check again.*/
+	/*				move to the middle of the left side "arr[(length/iterations]" and check again.*/
 	/*			else:*/
 	/*				move to the middle of the right side and check again.*/
 	/*				*/
@@ -47,15 +47,15 @@ int *BinarySearchIter(const int SortedArray[], int query, size_t length)
 int *BinarySearchRec(const int SortedArray[], int query, size_t length)
 {
 	/*	asserts*/
-	/*	*/
+	/*	i = middle of the array	*/
 	/*	if arr[i] equals query*/
-	/*	return i*/
+	/*	return sorted_arr+i*/
 	/*	*/
 	/*	if query < arr[i]*/
 	/*		go to middle of the left side which means index i/2*/
-	/*	*/s
+	/*	*/
 	/*	if query > arr[i]*/
-	/*		go to middle of the right side which means length-i/2*/
+	/*		go to middle of the right side which means (length-i)/2*/
 	/*	*/
 	/*	recursivly run the func*/
 }
@@ -63,6 +63,7 @@ int *BinarySearchRec(const int SortedArray[], int query, size_t length)
 /******************************************************************************/
 int *MergeArrIMP(int arr1[], int arr2[], size_t num_of_elements)
 {
+/*	asserts*/
 	/*	create an array that will be the sorted array*/
 	/*	lets call it sorted_arr , handle allocation errors if any*/
 	/*	*/
@@ -82,16 +83,26 @@ int *MergeArrIMP(int arr1[], int arr2[], size_t num_of_elements)
 
 int MergeSort(int arr_to_sort[], size_t num_of_elements)
 {
+/*	asserts*/
 	/*	base condition:*/
-	/*	if only one elemenet in the array*/
+	/*	if only one elemenet in the array or no elemenets at all */
 	/*		return array*/
 	/*	*/
 	/*	left_array = left half of the array*/
 	/*	right_array = right half of the array*/
-	/*	*/
-	/*	left_array = MergeSort(left_array)*/
-	/*	right_array = MergeSort(right_array)*/
-	/*	*/
+	/*	split each side of the array till its includes only 1 elemenet	*/
+	/*	left_side_sorted = MergeSort(left_array)*/
+	/*	right_side_sorted = MergeSort(right_array)*/
+	/*	send 2 merged arrays to MergeArrIMP to merge them	*/
 	/*	return MergeArrIMP(left_array, right_array)*/
+}
+/******************************************************************************/
+void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
+																const void *))
+{
+	asserts
+	
+	choose middle elemenet as a pivot:
+		
 }
 /******************************************************************************/
