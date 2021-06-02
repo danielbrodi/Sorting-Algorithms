@@ -61,10 +61,37 @@ int *BinarySearchRec(const int SortedArray[], int query, size_t length)
 }
 
 /******************************************************************************/
-int MergeSort(int arr_to_sort[], size_t num_of_elements)
+int *MergeArrIMP(int arr1[], int arr2[], size_t num_of_elements)
 {
-	
+	/*	create an array that will be the sorted array*/
+	/*	lets call it sorted_arr , handle allocation errors if any*/
+	/*	*/
+	/*	while both arrays have elements:*/
+	/*		if arr1[0] > arr2[0]:*/
+	/*			add arr2[0] to the end of sorted_arr*/
+	/*			remove arr2[0] from arr2*/
+	/*		else*/
+	/*			add arr1[0] to sorted_arr*/
+	/*			remove arr1[0] from arr1*/
+	/*			*/
+	/*	while eiter of the array has elemenets:*/
+	/*		add each elemenet to sorted_arr and remove it from the original array*/
+	/*		*/
+	/*		return sorted_arr*/
 }
 
-
+int MergeSort(int arr_to_sort[], size_t num_of_elements)
+{
+	/*	base condition:*/
+	/*	if only one elemenet in the array*/
+	/*		return array*/
+	/*	*/
+	/*	left_array = left half of the array*/
+	/*	right_array = right half of the array*/
+	/*	*/
+	/*	left_array = MergeSort(left_array)*/
+	/*	right_array = MergeSort(right_array)*/
+	/*	*/
+	/*	return MergeArrIMP(left_array, right_array)*/
+}
 /******************************************************************************/
