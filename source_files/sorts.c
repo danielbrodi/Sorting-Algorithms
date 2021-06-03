@@ -2,8 +2,8 @@
 * File:				sorts.c
 * Author:			Daniel Brodsky				 		  												  								
 * Date:				02-06-2021
-* Code Reviewer:	
-* Pseudo Reviewer: 						   								
+* Code Reviewer:	Eran
+* Pseudo Reviewer: 	Eran					   								
 * Version:			1.0   								
 * Description:		Sorts and searches algorithms implementations. 
 \******************************************************************************/
@@ -29,44 +29,44 @@
 
 int *BinarySearchIter(const int SortedArray[], int query, size_t length)
 {
-	/*	asserts												*/
-	/*	check the middle of the array:*/
-	/*	middle -> i = length / 2:*/
-	/*	if query equals arr[i] then return arr+i.	*/
-	/*while (middle elemenet != query && iterantion <= log(length))	*/
-	/*{
-	/*	if midde elemenet < query:		*/
-	/*		update middle elemenet index to middle of the right half;	*/
-	/*	else midde elemenet > query:	*/
-	/*		update middle elemenet index to middle of the left half;*/
-	
-	/*	++iterantion;	*/
-	/*}
+	/*if (r >= l) {*/
+	/*int mid = l + (r - l) / 2;*/
 
-	/*if a[i] == query:*/
-	/*	return arr+i*/
-	/*	*/
-	/*return null.*/
+	/*// If the element is present at the middle*/
+	/*// itself*/
+	/*if (arr[mid] == x)*/
+	/*return mid;*/
 
+	/*// If element is smaller than mid, then*/
+	/*// it can only be present in left subarray*/
+	/*if (arr[mid] > x)*/
+	/*return binarySearch(arr, l, mid - 1, x);*/
+
+	/*// Else the element can only be present*/
+	/*// in right subarray*/
+	/*return binarySearch(arr, mid + 1, r, x);*/
+	/*}*/
+
+	/*// We reach here when element is not*/
+	/*// present in array*/
+	/*return -1;*/
 }
 /******************************************************************************/
 int *BinarySearchRec(const int SortedArray[], int query, size_t length)
 {
 
-/*	start = sorted_arr; // first elemenet of the array	*/
-/*	end = start + length; // last elemenet in the array	*/
+/*	begin = sorted_arr; // first elemenet of the array	*/
+/*	last = begin + length - 1; // last elemenet in the array	*/
 
-/*	if length == 0		*/
+/*	if length == 1		*/
 /*	{
-		return null
+		return (query == *sorted_arr ? *sorted_arr : NULL);
 	}
-/*		mid = start + length/2;	*/
+/*		mid = (begin + last) / 2;	*/
 
-/*		if mid equals query : return mid;	*/
-
-/*		query > *mid ? return BinarySearchRec(sorted_arr+mid+1, query, length/2);	*/
-
-/*		query < *mid ? return BinarySearchRec(sorted_arr, query, length/2);	*/
+/*	isBigger = query > *mid;*/
+	
+/*	return BinarySearchRec(sorted_arr+(mid + 1)*IsBigger, query, isBigger * (length - length /2 ) + !isbigger*(length/2))*/
 /*	
 }
 /******************************************************************************/
@@ -107,12 +107,59 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	/*	return MergeArrIMP(left_side_sorted, right_side_sorted, left_array size, right_array size)*/
 }
 /******************************************************************************/
+void SwapPtrValues(void *ptr1, void *ptr2, size_t size_of_elem)
+{
+/*	asserts*/
+/*	while size_of_elem:*/
+/*			look at both ptrs as (char *)		*/
+/*			xor swap between each char:*/
+/*				*(char *)ptr1 ^= *(char *)ptr2;*/
+/*				*(char *)ptr2 ^= *(char *)ptr1;*/
+/*				*(char *)ptr1 ^= *(char *)ptr2;*/
+/*	end while*/
+}
+
+void *PartitionIMP(void *left, void *right, void *pivot)
+{
+/*	assert*/
+	/*   leftPointer = left */
+	/*   rightPointer = right */
+	/*	while rightPointer != leftPointer	*/
+			/*      while leftPointer <= pivot && still inside the array range */
+			/*         ++leftPointer            */
+			/*      end while*/
+			/*		*/
+			/*      while rightPointer > pivot: */
+			/*         ++rightPointer         */
+			/*      end while*/
+			/*		*/
+			/*      if leftPointer != rightPointer*/
+			/*         swap leftPointer,rightPointer*
+					/*      end if*/
+	/*   end while */
+	/*	*/
+	/*   swap leftPointer,pivot*/
+	/*   return leftPointer*/
+	/*	*/
+	/*end function*/
+}
 void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
 																const void *))
 {
-	asserts
-	
-	choose middle elemenet as a pivot:
+	/*asserts*/
+
+	/*left = base*/
+	/*right = base + nmemb - 1;*/
+
+	/*if right == left:*/
+	/*return*/
+
+
+	/*pivot = (base + right) / 2; // middle element in the array*/
+	/*partition = PartitionIMP(left, right, pivot)*/
+	/*quickSort(left,partition-1)*/
+	/*quickSort(partition+1,right)    */
+	/*end if	*/
 		
 }
 /******************************************************************************/
