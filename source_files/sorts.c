@@ -3,7 +3,7 @@
 * Author:			Daniel Brodsky				 		  												  								
 * Date:				02-06-2021
 * Code Reviewer:	Eran
-* Pseudo Reviewer: 	Eran					   								
+* Pseudo Reviewer: 	Ariel/Eran				   								
 * Version:			1.0   								
 * Description:		Sorts and searches algorithms implementations. 
 \******************************************************************************/
@@ -29,27 +29,7 @@
 
 int *BinarySearchIter(const int SortedArray[], int query, size_t length)
 {
-	/*if (r >= l) {*/
-	/*int mid = l + (r - l) / 2;*/
 
-	/*// If the element is present at the middle*/
-	/*// itself*/
-	/*if (arr[mid] == x)*/
-	/*return mid;*/
-
-	/*// If element is smaller than mid, then*/
-	/*// it can only be present in left subarray*/
-	/*if (arr[mid] > x)*/
-	/*return binarySearch(arr, l, mid - 1, x);*/
-
-	/*// Else the element can only be present*/
-	/*// in right subarray*/
-	/*return binarySearch(arr, mid + 1, r, x);*/
-	/*}*/
-
-	/*// We reach here when element is not*/
-	/*// present in array*/
-	/*return -1;*/
 }
 /******************************************************************************/
 int *BinarySearchRec(const int SortedArray[], int query, size_t length)
