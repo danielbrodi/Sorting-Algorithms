@@ -29,72 +29,82 @@
 
 int *BinarySearchIter(const int SortedArray[], int query, size_t length)
 {
-	/*	asserts*/
-	/*	*/
-	/*	go to the middle of the array sorted_arr[length/2] */
-	/*	return if equals to query*/
-	/*	if not:*/
-	/*		while value in the array is not equal to query:*/
-	/*			if query is smaller than the value in the array:*/
-	/*				move to the middle of the left side "arr[(length/iterations]" and check again.*/
-	/*			else:*/
-	/*				move to the middle of the right side and check again.*/
-	/*				*/
-	/*			return found index.*/
-}
+	/*	asserts												*/
+	/*	check the middle of the array:*/
+	/*	middle -> i = length / 2:*/
+	/*	if query equals arr[i] then return arr+i.	*/
+	/*while (middle elemenet != query && iterantion <= log(length))	*/
+	/*{
+	/*	if midde elemenet < query:		*/
+	/*		update middle elemenet index to middle of the right half;	*/
+	/*	else midde elemenet > query:	*/
+	/*		update middle elemenet index to middle of the left half;*/
+	
+	/*	++iterantion;	*/
+	/*}
 
+	/*if a[i] == query:*/
+	/*	return arr+i*/
+	/*	*/
+	/*return null.*/
+
+}
 /******************************************************************************/
 int *BinarySearchRec(const int SortedArray[], int query, size_t length)
 {
-	/*	asserts*/
-	/*	i = middle of the array	*/
-	/*	if arr[i] equals query*/
-	/*	return sorted_arr+i*/
-	/*	*/
-	/*	if query < arr[i]*/
-	/*		go to middle of the left side which means index i/2*/
-	/*	*/
-	/*	if query > arr[i]*/
-	/*		go to middle of the right side which means (length-i)/2*/
-	/*	*/
-	/*	recursivly run the func*/
-}
 
+/*	start = sorted_arr; // first elemenet of the array	*/
+/*	end = start + length; // last elemenet in the array	*/
+
+/*	if length == 0		*/
+/*	{
+		return null
+	}
+/*		mid = start + length/2;	*/
+
+/*		if mid equals query : return mid;	*/
+
+/*		query > *mid ? return BinarySearchRec(sorted_arr+mid+1, query, length/2);	*/
+
+/*		query < *mid ? return BinarySearchRec(sorted_arr, query, length/2);	*/
+/*	
+}
 /******************************************************************************/
-int *MergeArrIMP(int arr1[], int arr2[], size_t num_of_elements)
+int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)
 {
 /*	asserts*/
-	/*	create an array that will be the sorted array*/
+	/*	create an array that will be the sorted array of the size of arr1_size + arr2_size */
 	/*	lets call it sorted_arr , handle allocation errors if any*/
 	/*	*/
 	/*	while both arrays have elements:*/
 	/*		if arr1[0] > arr2[0]:*/
 	/*			add arr2[0] to the end of sorted_arr*/
-	/*			remove arr2[0] from arr2*/
+	/*			increment arr2 ptr*/
 	/*		else*/
 	/*			add arr1[0] to sorted_arr*/
-	/*			remove arr1[0] from arr1*/
+	/*			increment arr1 ptr*/
 	/*			*/
-	/*	while eiter of the array has elemenets:*/
-	/*		add each elemenet to sorted_arr and remove it from the original array*/
+	/*	while either of the array has elemenets:*/
+	/*		add each elemenet from that array to sorted_arr and increment ptr*/
 	/*		*/
-	/*		return sorted_arr*/
+	
+	/*	return sorted_arr*/
 }
 
 int MergeSort(int arr_to_sort[], size_t num_of_elements)
 {
 /*	asserts*/
 	/*	base condition:*/
-	/*	if only one elemenet in the array or no elemenets at all */
+	/*	if only one elemenet in the array */
 	/*		return array*/
 	/*	*/
-	/*	left_array = left half of the array*/
-	/*	right_array = right half of the array*/
-	/*	split each side of the array till its includes only 1 elemenet	*/
+	/*	left_array = left half of the array, size: num_of_elements/2*/
+	/*	right_array = right half of the array, size: num_of_elements - size of left_array*/
+	/*	sort each side of the array 		*/
 	/*	left_side_sorted = MergeSort(left_array)*/
 	/*	right_side_sorted = MergeSort(right_array)*/
-	/*	send 2 merged arrays to MergeArrIMP to merge them	*/
-	/*	return MergeArrIMP(left_array, right_array)*/
+	/*	send 2 sorted arrays to MergeArrIMP to merge them	*/
+	/*	return MergeArrIMP(left_side_sorted, right_side_sorted, left_array size, right_array size)*/
 }
 /******************************************************************************/
 void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
