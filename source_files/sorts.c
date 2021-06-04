@@ -12,20 +12,16 @@
 
 #include <assert.h>		/*	assert			*/
 #include <stddef.h>		/*	size_t, NULL	*/
+#include <stdlib.h>		/*	malloc, free	*/
 
 #include "sorts.h"
-/******************************* Macros & enums *******************************/
-
-
-
-/**************************** Structs  Definitions ****************************/
-
-
 
 /**************************** Forward Declarations ****************************/
 static int *MergeArrIMP(int arr1[], int arr2[], size_t size1, size_t size2);
 
+static void *PartitionIMP(void *left, void *right, void *pivot);
 
+void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);
 /************************* Functions  Implementations *************************/
 
 int *BinarySearchIter(const int SortedArray[], int key, size_t length)
@@ -190,65 +186,86 @@ int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)
 	return (merged_arr);
 }
 /******************************************************************************/
-void SwapPtrValues(void *ptr1, void *ptr2, size_t size_of_elem)
+void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
+																const void *))
 {
-	/*	asserts															*/
+	void *left = NULL, *right = NULL, pivot = NULL, partition = NULL;
+	
+	assert(base);
+	assert(nmemb);
+	assert(size);
+	assert(compare);
+
+	/*	base case: if left side runner meets right side runner				*/
+	if (left == right)
+	{
+		return;
+	}
+
+	left = base;
+	right = left + nmemb - 1;
+
+	pivot = (left + right) / 2; /* choose pivot as the middle elemenet		*/
+	partition = PartitionIMP(left, right, pivot)
+	QSort(left, partition - 1);
+	QSort(partition + 1, right);
+}
+/*----------------------------------------------------------------------------*/
+void *PartitionIMP(void *left, void *right, void *pivot)
+{
+	void *LSideRunner = left, *RSideRunner = right;
+	
+	assert(left);
+	assert(right);
+	assert(pivot);
+	
+	/*	while RSideRunner != LSideRunner									*/
+	while (LSideRunner != RSideRunner)
+	{
+		/*	while leftPointer <= pivot && still inside the array range 	*/
+		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= right)
+		{
+			/*	increment left runner				*/
+			++LSideRunner;
+		}
+		
+		/*	while rightPointer > pivot									*/
+		while (cmp_func(RSideRunner, pivot) > 0)
+		{
+			/*	decrement right runner				*/
+			--RSideRunner;
+		}
+		
+		/*	if leftPointer != rightPointer								*/
+		if (LSideRunner != RSideRunner)
+		{
+			/*swap leftPointer,rightPointer			*/
+			SwapPtrsValues(RSideRunner, LSideRunner, size_of_elem);
+		}
+	}
+		
+		/*   swap leftPointer,pivot											*/
+		SwapPtrsValues(pivot, LSideRunner, size_of_elem);
+		
+		/*   return leftPointer												*/
+		return (LSideRunner);
+}
+/*----------------------------------------------------------------------------*/
+void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
+{
+	/*	asserts									*/
 	assert(ptr1);
 	assert(ptr2);
 	assert(size_of_elem);
 	
-	/*	while size_of_elem:												*/
+	/*	while size_of_elem:						*/
 	while(size_of_elem)
 	{
-		/*	look at both ptrs as (char *)		*/
-		/*	xor swap between each char:			*/
+		/*	look at both ptrs as (char *)	*/
+		/*	xor swap between each char:		*/
 		*(char *)ptr1 ^= *(char *)ptr2;
 		*(char *)ptr2 ^= *(char *)ptr1;
 		*(char *)ptr1 ^= *(char *)ptr2;	
 	}
 }
-/*----------------------------------------------------------------------------*/
-void *PartitionIMP(void *left, void *right, void *pivot)
-{
-/*	assert*/
-	/*   leftPointer = left */
-	/*   rightPointer = right */
-	/*	while rightPointer != leftPointer	*/
-			/*      while leftPointer <= pivot && still inside the array range */
-			/*         ++leftPointer            */
-			/*      end while*/
-			/*		*/
-			/*      while rightPointer > pivot: */
-			/*         ++rightPointer         */
-			/*      end while*/
-			/*		*/
-			/*      if leftPointer != rightPointer*/
-			/*         swap leftPointer,rightPointer*
-					/*      end if*/
-	/*   end while */
-	/*	*/
-	/*   swap leftPointer,pivot*/
-	/*   return leftPointer*/
-	/*	*/
-	/*end function*/
-}
-/*----------------------------------------------------------------------------*/
-void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
-																const void *))
-{
-	/*asserts*/
-
-	/*left = base*/
-	/*right = base + nmemb - 1;*/
-
-	/*if right == left:*/
-	/*return*/
-
-
-	/*pivot = (base + right) / 2; // middle element in the array*/
-	/*partition = PartitionIMP(left, right, pivot)*/
-	/*quickSort(left,partition-1)*/
-	/*quickSort(partition+1,right)    */
-	/*end if	*/
-		
-}
+/******************************************************************************/
