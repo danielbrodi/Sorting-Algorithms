@@ -21,7 +21,7 @@ static int *MergeArrIMP(int arr1[], int arr2[], size_t size1, size_t size2);
 
 static void *PartitionIMP(void *left, void *right, void *pivot);
 
-void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);
+static void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);
 /************************* Functions  Implementations *************************/
 
 int *BinarySearchIter(const int SortedArray[], int key, size_t length)
