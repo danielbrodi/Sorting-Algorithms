@@ -111,7 +111,7 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	/*	base condition:	if only one elemenet in the array - return the array */
 	if (1 == num_of_elements)
 	{
-		return (arr_to_sort);
+		return (0); /*	array was successfully sorted	*/
 	}
 	
 	/*	left_array = left half of the array, size: num_of_elements/2		*/
@@ -190,3 +190,65 @@ int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)
 	return (merged_arr);
 }
 /******************************************************************************/
+void SwapPtrValues(void *ptr1, void *ptr2, size_t size_of_elem)
+{
+	/*	asserts															*/
+	assert(ptr1);
+	assert(ptr2);
+	assert(size_of_elem);
+	
+	/*	while size_of_elem:												*/
+	while(size_of_elem)
+	{
+		/*	look at both ptrs as (char *)		*/
+		/*	xor swap between each char:			*/
+		*(char *)ptr1 ^= *(char *)ptr2;
+		*(char *)ptr2 ^= *(char *)ptr1;
+		*(char *)ptr1 ^= *(char *)ptr2;	
+	}
+}
+/*----------------------------------------------------------------------------*/
+void *PartitionIMP(void *left, void *right, void *pivot)
+{
+/*	assert*/
+	/*   leftPointer = left */
+	/*   rightPointer = right */
+	/*	while rightPointer != leftPointer	*/
+			/*      while leftPointer <= pivot && still inside the array range */
+			/*         ++leftPointer            */
+			/*      end while*/
+			/*		*/
+			/*      while rightPointer > pivot: */
+			/*         ++rightPointer         */
+			/*      end while*/
+			/*		*/
+			/*      if leftPointer != rightPointer*/
+			/*         swap leftPointer,rightPointer*
+					/*      end if*/
+	/*   end while */
+	/*	*/
+	/*   swap leftPointer,pivot*/
+	/*   return leftPointer*/
+	/*	*/
+	/*end function*/
+}
+/*----------------------------------------------------------------------------*/
+void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
+																const void *))
+{
+	/*asserts*/
+
+	/*left = base*/
+	/*right = base + nmemb - 1;*/
+
+	/*if right == left:*/
+	/*return*/
+
+
+	/*pivot = (base + right) / 2; // middle element in the array*/
+	/*partition = PartitionIMP(left, right, pivot)*/
+	/*quickSort(left,partition-1)*/
+	/*quickSort(partition+1,right)    */
+	/*end if	*/
+		
+}
