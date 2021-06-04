@@ -13,7 +13,7 @@
 /* Returns NULL if the key is not found 			*/
 int *BinarySearchIter(const int SortedArray[], int key, size_t length);
 
-int *BinarySearchRec(const int SortedArray[], int query, size_t length);
+int *BinarySearchRec(const int SortedArray[], int key, size_t length);
 
 /* Returns 0 on success and 1 on failure 			*/
 int MergeSort(int arr_to_sort[], size_t num_of_elements);
