@@ -10,8 +10,8 @@
 #include <stddef.h>		/*	size_t	*/
 
 /* Recieves an array sorted from least to greatest 	*/
-/* Returns NULL if the query is not found 			*/
-int *BinarySearchIter(const int SortedArray[], int query, size_t length);
+/* Returns NULL if the key is not found 			*/
+int *BinarySearchIter(const int SortedArray[], int key, size_t length);
 
 int *BinarySearchRec(const int SortedArray[], int query, size_t length);
 

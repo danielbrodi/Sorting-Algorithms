@@ -10,9 +10,10 @@
 
 /********************************* Inclusions *********************************/
 
-#include <assert.h>		/*	assert	*/
+#include <assert.h>		/*	assert			*/
+#include <stddef.h>		/*	size_t, NULL	*/
 
-
+#include "sorts.h"
 /******************************* Macros & enums *******************************/
 
 
@@ -27,13 +28,44 @@
 
 /************************* Functions  Implementations *************************/
 
-int *BinarySearchIter(const int SortedArray[], int query, size_t length)
+int *BinarySearchIter(const int SortedArray[], int key, size_t length)
 {
+	/*	variables that will set the boundries of the searched area		*/
+	int left = 0, right = 0, middle = 0;
+	int *result = NULL;
+	
+	assert(SortedArray);
+	assert(length);
+	
+	left = 0; 			/*	first elemenet in the array					*/
+	right = length - 1;	/*	last elemenet in the  array					*/
 
+	/* while only one elemenet is left in the searched area				*/
+	while (left <= right)
+	{
+		/* split it to half												*/
+		middle = left + (right - left) / 2;
+		
+		/*	if key greater, ignore left half, search only in right half	*/
+		if (SortedArray[middle] < key)
+		{
+			left = middle + 1;
+		}
+		/*	if key smaller, ignore right half, search only in left half	*/
+		else
+		{
+			right = middle - 1;
+		}
+	}
+
+	/*	if we reach here, then element is the key or was not found		*/
+	result = (int *)SortedArray + middle;
+			
+	return (key == *result) ? result : NULL;
 }
 /******************************************************************************/
-int *BinarySearchRec(const int SortedArray[], int query, size_t length)
-{
+/*int *BinarySearchRec(const int SortedArray[], int query, size_t length)*/
+/*{*/
 
 /*	begin = sorted_arr; // first elemenet of the array	*/
 /*	last = begin + length - 1; // last elemenet in the array	*/
@@ -50,8 +82,8 @@ int *BinarySearchRec(const int SortedArray[], int query, size_t length)
 /*	
 }
 /******************************************************************************/
-int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)
-{
+/*int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)*/
+/*{*/
 /*	asserts*/
 	/*	create an array that will be the sorted array of the size of arr1_size + arr2_size */
 	/*	lets call it sorted_arr , handle allocation errors if any*/
@@ -69,10 +101,10 @@ int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)
 	/*		*/
 	
 	/*	return sorted_arr*/
-}
+/*}*/
 
-int MergeSort(int arr_to_sort[], size_t num_of_elements)
-{
+/*int MergeSort(int arr_to_sort[], size_t num_of_elements)*/
+/*{*/
 /*	asserts*/
 	/*	base condition:*/
 	/*	if only one elemenet in the array */
@@ -85,10 +117,10 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	/*	right_side_sorted = MergeSort(right_array)*/
 	/*	send 2 sorted arrays to MergeArrIMP to merge them	*/
 	/*	return MergeArrIMP(left_side_sorted, right_side_sorted, left_array size, right_array size)*/
-}
+/*}*/
 /******************************************************************************/
-void SwapPtrValues(void *ptr1, void *ptr2, size_t size_of_elem)
-{
+/*void SwapPtrValues(void *ptr1, void *ptr2, size_t size_of_elem)*/
+/*{*/
 /*	asserts*/
 /*	while size_of_elem:*/
 /*			look at both ptrs as (char *)		*/
@@ -97,10 +129,10 @@ void SwapPtrValues(void *ptr1, void *ptr2, size_t size_of_elem)
 /*				*(char *)ptr2 ^= *(char *)ptr1;*/
 /*				*(char *)ptr1 ^= *(char *)ptr2;*/
 /*	end while*/
-}
+/*}*/
 
-void *PartitionIMP(void *left, void *right, void *pivot)
-{
+/*void *PartitionIMP(void *left, void *right, void *pivot)*/
+/*{*/
 /*	assert*/
 	/*   leftPointer = left */
 	/*   rightPointer = right */
@@ -122,10 +154,10 @@ void *PartitionIMP(void *left, void *right, void *pivot)
 	/*   return leftPointer*/
 	/*	*/
 	/*end function*/
-}
-void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
-																const void *))
-{
+/*}*/
+/*void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,*/
+/*																const void *))*/
+/*{*/
 	/*asserts*/
 
 	/*left = base*/
@@ -141,5 +173,5 @@ void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
 	/*quickSort(partition+1,right)    */
 	/*end if	*/
 		
-}
+/*}*/
 /******************************************************************************/
