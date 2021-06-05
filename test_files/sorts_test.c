@@ -19,8 +19,8 @@
 
 /***************************** Macros Definitions *****************************/
 
-/* generates random number from 1 to 100 			*/
-#define RANDOM_NUM ((rand() % 100) + 1)	
+/* generates random number from 1 to 100 				*/
+#define RANDOM_NUM ((rand() % 100 + 1))
 
 /**************************** Forward Declarations ****************************/
 static void PrintHeader();
@@ -29,13 +29,13 @@ static void BinarySearchTest();
 
 static void MergeSortTest();
 
-static void QSortTest();
+/*static void QSortTest();*/
 
 /*	Returns:
- *	negative value if num1 is smaller than num2
- *	positive value if num1 is bigger than num2
- *	0 if num1 is equals to num2							*/
-int CompareInts(const void *num1, const void *num2);
+ *	negative value if num1 is smaller than num2.
+ *	positive value if num1 is bigger than num2.
+ *	0 if num1 is equals to num2,						*/
+/*int CompareInts(const void *num1, const void *num2);*/
 /******************************************************************************/
 /******************************* Main__Function *******************************/
 
@@ -50,7 +50,7 @@ int main()
 	/*	Runs tests			*/
 	BinarySearchTest();
 	MergeSortTest();
-	QSortTest();
+/*	QSortTest();*/
 	
 	return (0);
 }
@@ -101,60 +101,61 @@ static void BinarySearchTest()
 /******************************************************************************/
 static void MergeSortTest()
 {
-	int is_working = 1;
-	int arr_to_sort[] = {RANDOM_NUM, RANDOM_NUM, RANDOM_NUM, RANDOM_NUM};
+/*	int is_working = 1;*/
+	int arr_to_sort[] = {20, 16, 1, -5, 100};
 	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
 	
 	printf(CYAN "Recursive Merge Sort Test: " RESET_COLOR);
-	printf(PURPLE "Original Array:")
+	printf(PURPLE "Original Array:");
 	
 	for (i = 0; i < arr_length; ++i)
 	{
 		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
 	}
-	
+	printf("\n");
 	MergeSort(arr_to_sort, arr_length);
 	
-	printf(PURPLE "Merge Sorted Array:")
+	printf(PURPLE "Merge Sorted Array:");
 	for (i = 0; i < arr_length; ++i)
 	{
 		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
 		
 	}
+	printf("\n\n");
 }
 /******************************************************************************/
-static void QSortTest()
-{
-	int is_working = 1;
-	int arr_to_sort[] = {RANDOM_NUM, RANDOM_NUM, RANDOM_NUM, RANDOM_NUM};
-	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
-	size_t elemenet_size = sizeof(arr_to_sort[0]);
-	
-	printf(CYAN "Recursive Quick Sort Test: " RESET_COLOR);
-	printf(PURPLE "Original Array:")
-	
-	for (i = 0; i < arr_length; ++i)
-	{
-		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
-	}
-	
-	QSort(arr_to_sort, arr_length, elemenet_size, CompareInts);
-	
-	printf(PURPLE "Quick Sorted Array:")
-	for (i = 0; i < arr_length; ++i)
-	{
-		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
-		
-	}
-}
-****************************************************************************
-int CompareInts(const void *num1, const void *num2)
-{
-	assert(num1);
-	assert(num2);
-	
-	return (*(int *)num1 - *(int *)num2);	
-}
+/*static void QSortTest()*/
+/*{*/
+/*	int is_working = 1;*/
+/*	int arr_to_sort[] = {RANDOM_NUM, RANDOM_NUM, RANDOM_NUM, RANDOM_NUM};*/
+/*	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;*/
+/*	size_t elemenet_size = sizeof(arr_to_sort[0]);*/
+/*	*/
+/*	printf(CYAN "Recursive Quick Sort Test: " RESET_COLOR);*/
+/*	printf(PURPLE "Original Array:")*/
+/*	*/
+/*	for (i = 0; i < arr_length; ++i)*/
+/*	{*/
+/*		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);*/
+/*	}*/
+/*	*/
+/*	QSort(arr_to_sort, arr_length, elemenet_size, CompareInts);*/
+/*	*/
+/*	printf(PURPLE "Quick Sorted Array:")*/
+/*	for (i = 0; i < arr_length; ++i)*/
+/*	{*/
+/*		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);*/
+/*		*/
+/*	}*/
+/*}*/
+/******************************************************************************/
+/*int CompareInts(const void *num1, const void *num2)*/
+/*{*/
+/*	assert(num1);*/
+/*	assert(num2);*/
+/*	*/
+/*	return (*(int *)num1 - *(int *)num2);	*/
+/*}*/
 /******************************************************************************/
 static void PrintHeader()
 {

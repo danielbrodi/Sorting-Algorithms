@@ -13,11 +13,13 @@
 #include <assert.h>		/*	assert			*/
 #include <stddef.h>		/*	size_t, NULL	*/
 #include <stdlib.h>		/*	malloc, free	*/
+#include <string.h>		/*	memcpy			*/
 
 #include "sorts.h"
 
 /**************************** Forward Declarations ****************************/
-/*static int *MergeArrIMP(int arr1[], int arr2[], size_t size1, size_t size2);*/
+static void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], 
+											size_t arr2_size, int merged_arr[]);
 
 /*static void *PartitionIMP(void *left, void *right, void *pivot);*/
 
@@ -98,7 +100,7 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 {
 	int left_index = 0, right_index = num_of_elements - 1;
 	
-	int *right_side_sorted = NULL, *left_side_sorted = NULL;
+	int *left_side_start = NULL, *right_side_start = NULL, *merged_arr = NULL;
 	
 	size_t left_side_size = 0, right_side_size = 0;
 
@@ -108,165 +110,89 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	/*	base condition:	if only one elemenet in the array - return the array */
 	if (1 == num_of_elements)
 	{
-		return (0); /*	array was successfully sorted	*/
+		return (0); /*	array was successfully sorted						*/
 	}
 	
-	/*	left_array = left half of the array, size: num_of_elements/2		*/
-	left_side_size = ((left_index + right_index) / 2) + 1;
-	/*	right_array = right half of the array,
-								size: num_of_elements - size of left_array	*/
+	/*	left half of the array												*/
+	left_side_start = arr_to_sort;
+	left_side_size = num_of_elements / 2;
+	/*	right half of the array												*/
+	right_side_start =	left_side_start + left_side_size;
 	right_side_size = num_of_elements - left_side_size;
 	
 	/*	sort each side of the array: 										*/
-	left_side_sorted = MergeSort(arr_to_sort, left_side_size);
-	right_side_sorted = MergeSort(arr_to_sort + left_side_size + 1, 
-															right_side_size);
+	MergeSort(left_side_start, left_side_size);
+	MergeSort(right_side_start, right_side_size);
 	
-	/*	send 2 sorted arrays to MergeArrIMP to merge them					*/
-	if (!MergeArrIMP(left_side_sorted, right_side_sorted, left_side_size,
-															right_side_size))
-	{
-		return (1);	/* failed to merge the arrays							*/
-	}
-}
-/*----------------------------------------------------------------------------*/
-int *MergeArrIMP(int arr1[], int arr2[], size_t arr1_size, size_t arr2_size)
-{
-	assert(arr1);
-	assert(arr2);
-	assert(arr1_size);
-	assert(arr2_size);
-	
-	/*	create an array that will be the sorted array that includes both arrays
-				lets call it merged_arr , handle allocation errors if any	*/
-	int *merged_arr = (int *)malloc(sizeof(int) * (arr1_size + arr2_size));
+	/*	create an array that will be the sorted array that includes
+							 both halves. handle allocation errors if any	*/
+	merged_arr = (int *)malloc(sizeof(int) * num_of_elements);
 	if (!merged_arr)
 	{
-		/*	while both arrays have elements:								*/
-		while (arr1_size && arr2_size)
-		{
-			/*	if arr1[0] > arr2[0]:								*/
-			if (*arr > *arr2)
-			{
-				/*	add arr2[0] to the end of merged_arr	*/
-				*merged_arr = *arr2;
-				/*	increment arr2 ptr						*/
-				++arr2;
-				--arr2_size;
-			} 
+		return (1);
+	}
+	
+	/*	send 2	halves of the array to MergeArrIMP to merge them into the
+	 *	previously created array											*/
+	MergeArrIMP(left_side_start, left_side_size, right_side_start, 
+												right_side_size, merged_arr);
+												
+	memcpy(arr_to_sort, merged_arr, sizeof(int) * num_of_elements);
+	
+	free(merged_arr);
+	merged_arr = NULL;
+	
+	return (0);
+}
+/*----------------------------------------------------------------------------*/
+void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size, 
+															int merged_arr[])
+{
+	assert(arr1);
+	assert(arr1_size);
+	assert(arr2);
+	assert(arr2_size);
+	assert(merged_arr);
 			
-			/*	if arr1[0] < arr2[0]: 								*/
-			if (*arr1 < *arr2)
-			{
-				/*	add arr1[0] to merged_arr				*/
-				*merged_arr = *arr1;
-				/*	increment arr1 ptr						*/
-				++arr1;
-				--arr1_size;
-			}
-
-		}
-		
-		/*	if either of the arrays still has elemenets, add them to the 
-		 *	merged array 													*/
-		while (arr1_size)
+	/*	while both arrays have elements:								*/
+	while (arr1_size && arr2_size)
+	{
+		/*	if arr1[0] > arr2[0]:								*/
+		if (*arr1 > *arr2)
 		{
+			/*	add arr2[0] to the end of merged_arr	*/
+			*merged_arr = *arr2;
+			/*	increment arr2 ptr						*/
+			++arr2;
+			--arr2_size;
+		} 
+		
+		/*	if arr1[0] < arr2[0]: 								*/
+		if (*arr1 < *arr2)
+		{
+			/*	add arr1[0] to merged_arr				*/
 			*merged_arr = *arr1;
+			/*	increment arr1 ptr						*/
 			++arr1;
 			--arr1_size;
 		}
-		
-		while (arr2_size)
-		{
-			*merged_arr = *arr2;
-			++arr2;
-			--arr2_size;
-		}		
-	}
-	
-	return (merged_arr);
-}
-/******************************************************************************/
-void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
-																const void *))
-{
-	void *left = NULL, *right = NULL, pivot = NULL, partition = NULL;
-	
-	assert(base);
-	assert(nmemb);
-	assert(size);
-	assert(compare);
 
-	/*	base case: if left side runner meets right side runner				*/
-	if (left == right)
-	{
-		return;
 	}
-
-	left = base;
-	right = left + nmemb - 1;
-
-	pivot = (left + right) / 2; /* choose pivot as the middle elemenet		*/
-	partition = PartitionIMP(left, right, pivot)
-	QSort(left, partition - 1);
-	QSort(partition + 1, right);
-}
-/*----------------------------------------------------------------------------*/
-void *PartitionIMP(void *left, void *right, void *pivot)
-{
-	void *LSideRunner = left, *RSideRunner = right;
 	
-	assert(left);
-	assert(right);
-	assert(pivot);
-	
-	/*	while RSideRunner != LSideRunner									*/
-	while (LSideRunner != RSideRunner)
+	/*	if either of the arrays still has elemenets, add them to the 
+	 *	merged array 													*/
+	while (arr1_size)
 	{
-		/*	while leftPointer <= pivot && still inside the array range 	*/
-		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= right)
-		{
-			/*	increment left runner				*/
-			++LSideRunner;
-		}
-		
-		/*	while rightPointer > pivot									*/
-		while (cmp_func(RSideRunner, pivot) > 0)
-		{
-			/*	decrement right runner				*/
-			--RSideRunner;
-		}
-		
-		/*	if leftPointer != rightPointer								*/
-		if (LSideRunner != RSideRunner)
-		{
-			/*swap leftPointer,rightPointer			*/
-			SwapPtrsValues(RSideRunner, LSideRunner, size_of_elem);
-		}
+		*merged_arr = *arr1;
+		++arr1;
+		--arr1_size;
 	}
-		
-		/*   swap leftPointer,pivot											*/
-		SwapPtrsValues(pivot, LSideRunner, size_of_elem);
-		
-		/*   return leftPointer												*/
-		return (LSideRunner);
-}
-/*----------------------------------------------------------------------------*/
-void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
-{
-	/*	asserts									*/
-	assert(ptr1);
-	assert(ptr2);
-	assert(size_of_elem);
 	
-	/*	while size_of_elem:						*/
-	while(size_of_elem)
+	while (arr2_size)
 	{
-		/*	look at both ptrs as (char *)	*/
-		/*	xor swap between each char:		*/
-		*(char *)ptr1 ^= *(char *)ptr2;
-		*(char *)ptr2 ^= *(char *)ptr1;
-		*(char *)ptr1 ^= *(char *)ptr2;	
-	}
+		*merged_arr = *arr2;
+		++arr2;
+		--arr2_size;
+	}		
 }
 /******************************************************************************/
