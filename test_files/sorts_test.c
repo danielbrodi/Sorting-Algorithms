@@ -23,7 +23,7 @@
 #define RANDOM_NUM ((rand() % 100) + 1)	
 
 /**************************** Forward Declarations ****************************/
-static void BinarySearchIterTest();
+static void BinarySearchTest();
 static void PrintHeader();
 /******************************************************************************/
 /******************************* Main__Function *******************************/
@@ -37,12 +37,13 @@ int main()
 	PrintHeader();
 	
 	/*	Runs tests			*/
-	BinarySearchIterTest();
+	BinarySearchTest();
+	MergeSortTest();
 	
 	return (0);
 }
 /******************************************************************************/
-void BinarySearchIterTest()
+static void BinarySearchTest()
 {
 	int is_working_iterative = 1;
 	int is_working_recursive = 1;
@@ -77,16 +78,38 @@ void BinarySearchIterTest()
 		}
 	}
 	
-	printf(CYAN "Binary Search Iterative Test: " RESET_COLOR);
+	printf(CYAN "Iterative Binary Search Test: " RESET_COLOR);
 	
 	is_working_iterative ? PRINT_SUCCESS : PRINT_FAILURE;
 	
-	printf(CYAN "Binary Search Recursive Test: " RESET_COLOR);
+	printf(CYAN "Recursive Binary Searc Test: " RESET_COLOR);
 	
 	is_working_recursive ? PRINT_SUCCESS : PRINT_FAILURE;
 }
 /******************************************************************************/
-
+static void MergeSortTest()
+{
+	int is_working = 1;
+	int arr_to_sort[] = {RANDOM_NUM, RANDOM_NUM, RANDOM_NUM, RANDOM_NUM};
+	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
+	
+	printf(CYAN "Recursive Merge Sort Test: " RESET_COLOR);
+	printf(CYAN "Original Array:")
+	
+	for (i = 0; i < arr_length; ++i)
+	{
+		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
+	}
+	
+	MergeSort(arr_to_sort, arr_length);
+	
+	printf(CYAN "Merge Sorted Array:")
+	for (i = 0; i < arr_length; ++i)
+	{
+		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
+		
+	}
+}
 /******************************************************************************/
 static void PrintHeader()
 {
