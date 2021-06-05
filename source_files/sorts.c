@@ -21,9 +21,9 @@
 static void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], 
 											size_t arr2_size, int merged_arr[]);
 
-/*static void *PartitionIMP(void *left, void *right, void *pivot);*/
+static void *PartitionIMP(void *left, void *right, void *pivot);
 
-/*static void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);*/
+static void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);
 /************************* Functions  Implementations *************************/
 
 int *BinarySearchIter(const int SortedArray[], int key, size_t length)
@@ -97,9 +97,7 @@ int *BinarySearchRec(const int SortedArray[], int key, size_t length)
 }
 /******************************************************************************/
 int MergeSort(int arr_to_sort[], size_t num_of_elements)
-{
-	int left_index = 0, right_index = num_of_elements - 1;
-	
+{	
 	int *left_side_start = NULL, *right_side_start = NULL, *merged_arr = NULL;
 	
 	size_t left_side_size = 0, right_side_size = 0;
@@ -129,14 +127,15 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	merged_arr = (int *)malloc(sizeof(int) * num_of_elements);
 	if (!merged_arr)
 	{
-		return (1);
+		return (1);	/*	allocation for merged array was failed				*/
 	}
 	
 	/*	send 2	halves of the array to MergeArrIMP to merge them into the
 	 *	previously created array											*/
 	MergeArrIMP(left_side_start, left_side_size, right_side_start, 
 												right_side_size, merged_arr);
-												
+	
+	/* copy merged_arr elemenets to arr_to_sort and free merged_arr			*/					
 	memcpy(arr_to_sort, merged_arr, sizeof(int) * num_of_elements);
 	
 	free(merged_arr);
@@ -162,6 +161,7 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 		{
 			/*	add arr2[0] to the end of merged_arr	*/
 			*merged_arr = *arr2;
+			++merged_arr;
 			/*	increment arr2 ptr						*/
 			++arr2;
 			--arr2_size;
@@ -172,6 +172,7 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 		{
 			/*	add arr1[0] to merged_arr				*/
 			*merged_arr = *arr1;
+			++merged_arr;
 			/*	increment arr1 ptr						*/
 			++arr1;
 			--arr1_size;
@@ -184,6 +185,8 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 	while (arr1_size)
 	{
 		*merged_arr = *arr1;
+		++merged_arr;
+		
 		++arr1;
 		--arr1_size;
 	}
@@ -191,8 +194,93 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 	while (arr2_size)
 	{
 		*merged_arr = *arr2;
+		++merged_arr;
+		
 		++arr2;
 		--arr2_size;
 	}		
+}
+/******************************************************************************/
+void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
+																const void *))
+{
+	void *left = NULL, *right = NULL, pivot = NULL, partition = NULL;
+	
+	assert(base);
+	assert(nmemb);
+	assert(size);
+	assert(compare);
+
+	/*	base case: if left side runner meets right side runner				*/
+	if (left == right)
+	{
+		return;
+	}
+
+	left = base;
+	right = left + nmemb - 1;
+
+	pivot = (left + right) / 2; /* choose pivot as the middle elemenet		*/
+	partition = PartitionIMP(left, right, pivot)
+	QSort(left, partition - 1);
+	QSort(partition + 1, right);
+}
+/*----------------------------------------------------------------------------*/
+void *PartitionIMP(void *left, void *right, void *pivot)
+{
+	void *LSideRunner = left, *RSideRunner = right;
+	
+	assert(left);
+	assert(right);
+	assert(pivot);
+	
+	/*	while RSideRunner != LSideRunner									*/
+	while (LSideRunner != RSideRunner)
+	{
+		/*	while leftPointer <= pivot && still inside the array range 	*/
+		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= right)
+		{
+			/*	increment left runner				*/
+			++LSideRunner;
+		}
+		
+		/*	while rightPointer > pivot									*/
+		while (cmp_func(RSideRunner, pivot) > 0)
+		{
+			/*	decrement right runner				*/
+			--RSideRunner;
+		}
+		
+		/*	if leftPointer != rightPointer								*/
+		if (LSideRunner != RSideRunner)
+		{
+			/*swap leftPointer,rightPointer			*/
+			SwapPtrsValues(RSideRunner, LSideRunner, size_of_elem);
+		}
+	}
+		
+		/*   swap leftPointer,pivot											*/
+		SwapPtrsValues(pivot, LSideRunner, size_of_elem);
+		
+		/*   return leftPointer												*/
+		return (LSideRunner);
+}
+/*----------------------------------------------------------------------------*/
+void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
+{
+	/*	asserts									*/
+	assert(ptr1);
+	assert(ptr2);
+	assert(size_of_elem);
+	
+	/*	while size_of_elem:						*/
+	while(size_of_elem)
+	{
+		/*	look at both ptrs as (char *)	*/
+		/*	xor swap between each char:		*/
+		*(char *)ptr1 ^= *(char *)ptr2;
+		*(char *)ptr2 ^= *(char *)ptr1;
+		*(char *)ptr1 ^= *(char *)ptr2;	
+	}
 }
 /******************************************************************************/
