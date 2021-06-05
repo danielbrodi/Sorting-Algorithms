@@ -111,7 +111,7 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	}
 	
 	/*	left_array = left half of the array, size: num_of_elements/2		*/
-	left_side_size = (left_index + right_index) / 2 + 1;
+	left_side_size = ((left_index + right_index) / 2) + 1;
 	/*	right_array = right half of the array,
 								size: num_of_elements - size of left_array	*/
 	right_side_size = num_of_elements - left_side_size;

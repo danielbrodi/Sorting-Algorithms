@@ -130,7 +130,7 @@ static void QSortTest()
 	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
 	size_t elemenet_size = sizeof(arr_to_sort[0]);
 	
-	printf(CYAN "Recursive Merge Sort Test: " RESET_COLOR);
+	printf(CYAN "Recursive Quick Sort Test: " RESET_COLOR);
 	printf(PURPLE "Original Array:")
 	
 	for (i = 0; i < arr_length; ++i)
@@ -140,7 +140,7 @@ static void QSortTest()
 	
 	QSort(arr_to_sort, arr_length, elemenet_size, CompareInts);
 	
-	printf(PURPLE "Merge Sorted Array:")
+	printf(PURPLE "Quick Sorted Array:")
 	for (i = 0; i < arr_length; ++i)
 	{
 		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
