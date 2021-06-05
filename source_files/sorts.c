@@ -17,11 +17,11 @@
 #include "sorts.h"
 
 /**************************** Forward Declarations ****************************/
-static int *MergeArrIMP(int arr1[], int arr2[], size_t size1, size_t size2);
+/*static int *MergeArrIMP(int arr1[], int arr2[], size_t size1, size_t size2);*/
 
-static void *PartitionIMP(void *left, void *right, void *pivot);
+/*static void *PartitionIMP(void *left, void *right, void *pivot);*/
 
-static void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);
+/*static void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);*/
 /************************* Functions  Implementations *************************/
 
 int *BinarySearchIter(const int SortedArray[], int key, size_t length)
@@ -37,7 +37,7 @@ int *BinarySearchIter(const int SortedArray[], int key, size_t length)
 	right_index = length - 1;	/*	last elemenet in the  array			*/
 
 	/* while only one elemenet is left in the searched area				*/
-	while (left_index <= right_index)
+	while (left_index < right_index)
 	{
 		/* split it to half												*/
 		middle = (left_index + right_index) / 2;
@@ -54,8 +54,10 @@ int *BinarySearchIter(const int SortedArray[], int key, size_t length)
 		}
 	}
 
-	/*	if we reach here, then element is the key or was not found		*/
-	result = (int *)SortedArray + middle;
+	/*	if we reach here, left_index equals right_index  which means
+	 *	there is only one elemenet that is left. Update the pointer
+	 *	to point at it, and check whether it equals the key or not		*/
+	result = (int *)SortedArray + right_index;
 			
 	return (key == *result ? result : NULL);
 }
@@ -71,7 +73,7 @@ int *BinarySearchRec(const int SortedArray[], int key, size_t length)
 	
 	assert(SortedArray);
 	assert(length);
-	
+		
 	/*	base condition: if one element in the array - check if equals to key */
 	if (1 == length)	
 	{
@@ -79,15 +81,14 @@ int *BinarySearchRec(const int SortedArray[], int key, size_t length)
 	}
 	
 	/* the middle element in the array 										*/
-	middle_index = (left_index + right_index) / 2;	
+	middle_index = (left_index + right_index + 1) / 2;	
 
 	/* check whether the key is bigger than the middle element				*/
-	is_bigger = (key > SortedArray[middle_index]);
+	is_bigger = (key >= SortedArray[middle_index]);
 	
 	/* set the boundries of the new search area based on is_bigger result 	*/
-	start_of_the_arr = SortedArray + ((middle_index + 1) * is_bigger);
-	new_arr_length = is_bigger * (length - (length / 2) ) +
-													!is_bigger * (length / 2);
+	start_of_the_arr = SortedArray + (middle_index) * is_bigger;
+	new_arr_length = is_bigger * (length - length/2) + !is_bigger * (length/2);
 	
 	/* recursive call of the function with the new area to be searched 		*/ 
 	return (BinarySearchRec(start_of_the_arr, key, new_arr_length));
