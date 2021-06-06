@@ -1,8 +1,7 @@
 /*********************************FILE__HEADER*********************************\
 * File:				sorts.c						 		  								
 * Author:			Daniel Brodsky					  								
-* Date:				02-06-2021
-* Code Reviewer:							   								
+* Date:				02-06-2021			   								
 * Version:			1.0					   								
 * Description:		Sorts and searches algorithms implementations tests file.		 
 \******************************************************************************/
