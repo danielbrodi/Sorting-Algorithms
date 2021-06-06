@@ -20,5 +20,6 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements);
 
 void QSort(void *base, size_t nmemb, size_t size, int (*compar)(const void *,
 																const void *));
-
+																														
+																														
 #endif					/* __SORTS_H__ */

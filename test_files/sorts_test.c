@@ -9,6 +9,7 @@
 
 /********************************* Inclusions *********************************/
 
+#include <assert.h>	/*	assert						*/
 #include <stddef.h>	/*	size_t						*/
 #include <stdio.h>	/*	printf						*/
 #include <stdlib.h>	/*	rand, srand					*/
@@ -51,6 +52,7 @@ int main()
 	BinarySearchTest();
 	MergeSortTest();
 	QSortTest();
+	
 	
 	return (0);
 }
@@ -124,8 +126,8 @@ static void QSortTest()
 	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
 	size_t elemenet_size = sizeof(arr_to_sort[0]);
 	
-	printf(CYAN "Recursive Quick Sort Test: " RESET_COLOR);
-	printf(PURPLE "Original Array:");
+	printf(CYAN "Recursive Quick Sort Test: \n" RESET_COLOR);
+	printf(PURPLE "Original Array:    ");
 	
 	for (i = 0; i < arr_length; ++i)
 	{

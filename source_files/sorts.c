@@ -21,7 +21,8 @@
 static void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], 
 											size_t arr2_size, int merged_arr[]);
 
-static void *PartitionIMP(void *left, void *right, void *pivot);
+void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem, 
+									int (*compare)(const void *, const void *));
 
 static void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem);
 /************************* Functions  Implementations *************************/
@@ -204,7 +205,7 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 																const void *))
 {
-	void *left = NULL, *right = NULL, pivot = NULL, partition = NULL;
+	void *left = NULL, *right = NULL, *pivot = NULL, *partition = NULL;
 	
 	assert(base);
 	assert(nmemb);
@@ -218,15 +219,16 @@ void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 	}
 
 	left = base;
-	right = left + nmemb - 1;
+	right = (char *)left + (nmemb*size) - 1;
 
-	pivot = (left + right) / 2; /* choose pivot as the middle elemenet		*/
-	partition = PartitionIMP(left, right, pivot)
-	QSort(left, partition - 1);
-	QSort(partition + 1, right);
+	pivot = (void *)(((size_t )left + (size_t )right) / 2); /* choose pivot as the middle elemenet		*/
+	partition = PartitionIMP(left, right, pivot, size, compare);
+	QSort(left, ((size_t)partition - (size_t)left) / size, size, compare);
+	QSort(left, ((size_t)right - (size_t)partition) / size, size, compare);
 }
 /*----------------------------------------------------------------------------*/
-void *PartitionIMP(void *left, void *right, void *pivot)
+void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem, 
+								int (*cmp_func )(const void *, const void *))
 {
 	void *LSideRunner = left, *RSideRunner = right;
 	
@@ -241,14 +243,14 @@ void *PartitionIMP(void *left, void *right, void *pivot)
 		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= right)
 		{
 			/*	increment left runner				*/
-			++LSideRunner;
+			LSideRunner = (char *)LSideRunner + size_of_elem;
 		}
 		
 		/*	while rightPointer > pivot									*/
 		while (cmp_func(RSideRunner, pivot) > 0)
 		{
 			/*	decrement right runner				*/
-			--RSideRunner;
+			RSideRunner = (char *)RSideRunner - size_of_elem;
 		}
 		
 		/*	if leftPointer != rightPointer								*/
@@ -268,19 +270,28 @@ void *PartitionIMP(void *left, void *right, void *pivot)
 /*----------------------------------------------------------------------------*/
 void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
 {
+	char *ptr1_byte = NULL, *ptr2_byte = NULL;
+	
 	/*	asserts									*/
 	assert(ptr1);
 	assert(ptr2);
 	assert(size_of_elem);
+	
+	ptr1_byte = ptr1;
+	ptr2_byte = ptr2;
 	
 	/*	while size_of_elem:						*/
 	while(size_of_elem)
 	{
 		/*	look at both ptrs as (char *)	*/
 		/*	xor swap between each char:		*/
-		*(char *)ptr1 ^= *(char *)ptr2;
-		*(char *)ptr2 ^= *(char *)ptr1;
-		*(char *)ptr1 ^= *(char *)ptr2;	
+		*ptr1_byte ^= *ptr2_byte;
+		*ptr2_byte ^= *ptr1_byte;
+		*ptr1_byte ^= *ptr2_byte;
+		
+		--size_of_elem;
+		++ptr1_byte;
+		++ptr2_byte;
 	}
 }
 /******************************************************************************/
