@@ -4,7 +4,7 @@
 * Date:				02-06-2021
 * Code Reviewer:	Eran
 * Pseudo Reviewer: 	Ariel/Eran				   								
-* Version:			1.0   								
+* Version:			1.5   								
 * Description:		Sorts and searches algorithms implementations. 
 \******************************************************************************/
 
@@ -67,8 +67,6 @@ int *BinarySearchIter(const int SortedArray[], int key, size_t length)
 /******************************************************************************/
 int *BinarySearchRec(const int SortedArray[], int key, size_t length)
 {
-	int left_index = 0; 			/*  first elemenet of the array	*/
-	int right_index = length - 1;	/* last elemenet in the array */	
 	int middle_index = 0, is_bigger = 0;
 	
 	const int *start_of_the_arr = NULL;
@@ -84,7 +82,7 @@ int *BinarySearchRec(const int SortedArray[], int key, size_t length)
 	}
 	
 	/* the middle element in the array 										*/
-	middle_index = (left_index + right_index + 1) / 2;	
+	middle_index = (length) / 2;	
 
 	/* check whether the key is bigger than the middle element				*/
 	is_bigger = (key >= SortedArray[middle_index]);
@@ -168,8 +166,8 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 			--arr2_size;
 		} 
 		
-		/*	if arr1[0] < arr2[0]: 								*/
-		if (*arr1 < *arr2)
+		/*	if arr1[0] <= arr2[0]: 								*/
+		else
 		{
 			/*	add arr1[0] to merged_arr				*/
 			*merged_arr = *arr1;
@@ -212,19 +210,31 @@ void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 	assert(size);
 	assert(compare);
 
+	left = base;
+	right = (char *)left + (nmemb) * size - size;
+	
 	/*	base case: if left side runner meets right side runner				*/
-	if (left == right)
+	if (1 == nmemb)
 	{
 		return;
 	}
-
-	left = base;
-	right = (char *)left + (nmemb*size) - 1;
-
-	pivot = (void *)(((size_t )left + (size_t )right) / 2); /* choose pivot as the middle elemenet		*/
-	partition = PartitionIMP(left, right, pivot, size, compare);
-	QSort(left, ((size_t)partition - (size_t)left) / size, size, compare);
-	QSort(left, ((size_t)right - (size_t)partition) / size, size, compare);
+	
+	/* choose pivot as the middle elemenet									*/
+	pivot = left;
+	
+	SwapPtrsValues(pivot, left, size);
+	
+	/*	move pivot to be the leftest elemenet of the array 					*/
+	partition = PartitionIMP(left, right, left, size, compare);
+	
+	if (partition > left)
+	{
+		QSort(left, ((char *)partition - (char *)left) / size, size, compare);
+	}
+	if (partition < right)
+	{
+		QSort((char *)partition + size, (((char *)right - ((char *)partition)) / size), size, compare);
+	}
 }
 /*----------------------------------------------------------------------------*/
 void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem, 
@@ -237,10 +247,10 @@ void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem,
 	assert(pivot);
 	
 	/*	while RSideRunner != LSideRunner									*/
-	while (LSideRunner != RSideRunner)
+	while (LSideRunner < RSideRunner)
 	{
 		/*	while leftPointer <= pivot && still inside the array range 	*/
-		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= right)
+		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= RSideRunner)
 		{
 			/*	increment left runner				*/
 			LSideRunner = (char *)LSideRunner + size_of_elem;
@@ -254,7 +264,7 @@ void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem,
 		}
 		
 		/*	if leftPointer != rightPointer								*/
-		if (LSideRunner != RSideRunner)
+		if (LSideRunner < RSideRunner)
 		{
 			/*swap leftPointer,rightPointer			*/
 			SwapPtrsValues(RSideRunner, LSideRunner, size_of_elem);
@@ -262,10 +272,10 @@ void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem,
 	}
 		
 		/*   swap leftPointer,pivot											*/
-		SwapPtrsValues(pivot, LSideRunner, size_of_elem);
+		SwapPtrsValues(pivot, (char *)RSideRunner, size_of_elem);
 		
 		/*   return leftPointer												*/
-		return (LSideRunner);
+		return (RSideRunner);
 }
 /*----------------------------------------------------------------------------*/
 void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
@@ -280,18 +290,21 @@ void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
 	ptr1_byte = ptr1;
 	ptr2_byte = ptr2;
 	
-	/*	while size_of_elem:						*/
-	while(size_of_elem)
+	if (ptr1_byte != ptr2_byte)
 	{
-		/*	look at both ptrs as (char *)	*/
-		/*	xor swap between each char:		*/
-		*ptr1_byte ^= *ptr2_byte;
-		*ptr2_byte ^= *ptr1_byte;
-		*ptr1_byte ^= *ptr2_byte;
-		
-		--size_of_elem;
-		++ptr1_byte;
-		++ptr2_byte;
+		/*	while size_of_elem:						*/
+		while(size_of_elem)
+		{
+			/*	look at both ptrs as (char *)	*/
+			/*	xor swap between each char:		*/
+			*ptr1_byte ^= *ptr2_byte;
+			*ptr2_byte ^= *ptr1_byte;
+			*ptr1_byte ^= *ptr2_byte;
+			
+			--size_of_elem;
+			++ptr1_byte;
+			++ptr2_byte;
+		}
 	}
 }
 /******************************************************************************/

@@ -96,7 +96,7 @@ static void BinarySearchTest()
 	
 	is_working_iterative ? PRINT_SUCCESS : PRINT_FAILURE;
 	
-	printf(CYAN "Recursive Binary Searc Test: " RESET_COLOR);
+	printf(CYAN "Recursive Binary Searc Test:  " RESET_COLOR);
 	
 	is_working_recursive ? PRINT_SUCCESS : PRINT_FAILURE;
 }
@@ -107,7 +107,7 @@ static void MergeSortTest()
 	int arr_to_sort[] = {20, 16, 1, -5, 100, 0, 10};
 	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
 	
-	printf(CYAN "Recursive Merge Sort Test: " RESET_COLOR);
+	printf(CYAN "Recursive Merge Sort Test:    " RESET_COLOR);
 	
 	MergeSort(arr_to_sort, arr_length);
 	
@@ -122,27 +122,20 @@ static void MergeSortTest()
 static void QSortTest()
 {
 	int is_working = 1;
-	int arr_to_sort[] = {20, 16, 1, -5, 100, 0, 10};
+	int arr_to_sort[] = {20, 16, 1, 18, 100, 0, 15, -3, 18};
 	size_t arr_length = sizeof(arr_to_sort) / sizeof(arr_to_sort[0]), i = 0;
 	size_t elemenet_size = sizeof(arr_to_sort[0]);
 	
-	printf(CYAN "Recursive Quick Sort Test: \n" RESET_COLOR);
-	printf(PURPLE "Original Array:    ");
+	printf(CYAN "Recursive Quick Sort Test:    " RESET_COLOR);
 	
-	for (i = 0; i < arr_length; ++i)
-	{
-		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
-	}
-	
-	printf("\n");
 	QSort(arr_to_sort, arr_length, elemenet_size, CompareInts);
 	
-	printf(PURPLE "Quick Sorted Array:");
-	for (i = 0; i < arr_length; ++i)
+	for (i = 0; i < arr_length - 1; ++i)
 	{
-		printf(YELLOW "%d, " RESET_COLOR, arr_to_sort[i]);
+		is_working *= (arr_to_sort[i] <= arr_to_sort[i + 1]);
 	}
-	printf("\n\n");
+	
+	is_working ? PRINT_SUCCESS : PRINT_FAILURE;
 }
 /******************************************************************************/
 int CompareInts(const void *num1, const void *num2)
