@@ -203,7 +203,7 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 																const void *))
 {
-	void *left = NULL, *right = NULL, *pivot = NULL, *partition = NULL;
+	void *left = NULL, *right = NULL, *partition = NULL;
 	
 	assert(base);
 	assert(nmemb);
@@ -219,12 +219,7 @@ void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 		return;
 	}
 	
-	/* choose pivot as the middle elemenet									*/
-	pivot = left;
-	
-	SwapPtrsValues(pivot, left, size);
-	
-	/*	move pivot to be the leftest elemenet of the array 					*/
+	/* set the leftest elemenet as the pivot								*/
 	partition = PartitionIMP(left, right, left, size, compare);
 	
 	if (partition > left)
@@ -233,7 +228,8 @@ void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 	}
 	if (partition < right)
 	{
-		QSort((char *)partition + size, (((char *)right - ((char *)partition)) / size), size, compare);
+		QSort((char *)partition + size,
+		 		(((char *)right - ((char *)partition)) / size), size, compare);
 	}
 }
 /*----------------------------------------------------------------------------*/
