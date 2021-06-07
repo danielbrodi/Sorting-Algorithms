@@ -18,6 +18,9 @@
 #include "sorts.h"
 
 /**************************** Forward Declarations ****************************/
+static void MergeSortIMP(int arr_to_sort[], size_t num_of_elements,
+															int merged_arr[]);
+
 static void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], 
 											size_t arr2_size, int merged_arr[]);
 
@@ -96,8 +99,32 @@ int *BinarySearchRec(const int SortedArray[], int key, size_t length)
 }
 /******************************************************************************/
 int MergeSort(int arr_to_sort[], size_t num_of_elements)
+{
+	int *merged_arr = NULL;
+	
+	assert(arr_to_sort);
+	assert(num_of_elements);
+	
+	/*	create an array that will be the sorted array.						*/
+	/*	handle allocation errors if any.									*/
+	merged_arr = (int *)malloc(sizeof(int) * num_of_elements);
+	if (!merged_arr)
+	{
+		return (1);	/*	allocation for merged array was failed				*/
+	}
+	
+	MergeSortIMP(arr_to_sort, num_of_elements, merged_arr);
+	
+	free(merged_arr);
+	merged_arr = NULL;
+	
+	return (0);
+}
+/*----------------------------------------------------------------------------*/
+static void MergeSortIMP(int arr_to_sort[], size_t num_of_elements,
+															int merged_arr[])
 {	
-	int *left_side_start = NULL, *right_side_start = NULL, *merged_arr = NULL;
+	int *left_side_start = NULL, *right_side_start = NULL;
 	
 	size_t left_side_size = 0, right_side_size = 0;
 
@@ -107,7 +134,7 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	/*	base condition:	if only one elemenet in the array - return the array */
 	if (1 == num_of_elements)
 	{
-		return (0); /*	array was successfully sorted						*/
+		return; /*	array was successfully sorted							*/
 	}
 	
 	/*	left half of the array												*/
@@ -121,89 +148,71 @@ int MergeSort(int arr_to_sort[], size_t num_of_elements)
 	MergeSort(left_side_start, left_side_size);
 	MergeSort(right_side_start, right_side_size);
 	
-	/*	create an array that will be the sorted array that includes
-							 both halves. handle allocation errors if any	*/
-	merged_arr = (int *)malloc(sizeof(int) * num_of_elements);
-	if (!merged_arr)
-	{
-		return (1);	/*	allocation for merged array was failed				*/
-	}
-	
 	/*	send 2	halves of the array to MergeArrIMP to merge them into the
 	 *	previously created array											*/
 	MergeArrIMP(left_side_start, left_side_size, right_side_start, 
 												right_side_size, merged_arr);
-	
-	/* copy merged_arr elemenets to arr_to_sort and free merged_arr			*/					
+												
+	/* 	copy merged_arr elemenets to arr_to_sort and free merged_arr		*/					
 	memcpy(arr_to_sort, merged_arr, sizeof(int) * num_of_elements);
-	
-	free(merged_arr);
-	merged_arr = NULL;
-	
-	return (0);
 }
 /*----------------------------------------------------------------------------*/
 void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size, 
 															int merged_arr[])
 {
+	/* create runners for each array to not run on the parameters		*/
+	int *arr1_runner = arr1, *arr2_runner = arr2, *merged_runner = merged_arr;
+	
+	/*	create pointers which indicate on the end of each array 		*/ 
+	int *arr1_end = arr1 + arr1_size, *arr2_end = arr2 + arr2_size;
+	
 	assert(arr1);
 	assert(arr1_size);
 	assert(arr2);
 	assert(arr2_size);
 	assert(merged_arr);
-			
+	
 	/*	while both arrays have elements:								*/
-	while (arr1_size && arr2_size)
+	while (arr1_runner < arr1_end && arr2_runner < arr2_end)
 	{
 		/*	if arr1[0] > arr2[0]:								*/
-		if (*arr1 > *arr2)
+		if (*arr1_runner > *arr2_runner)
 		{
 			/*	add arr2[0] to the end of merged_arr	*/
-			*merged_arr = *arr2;
-			++merged_arr;
+			*merged_runner = *arr2_runner;
+			++merged_runner;
 			/*	increment arr2 ptr						*/
-			++arr2;
-			--arr2_size;
+			++arr2_runner;
 		} 
 		
 		/*	if arr1[0] <= arr2[0]: 								*/
 		else
 		{
 			/*	add arr1[0] to merged_arr				*/
-			*merged_arr = *arr1;
-			++merged_arr;
+			*merged_runner = *arr1_runner;
+			++merged_runner;
 			/*	increment arr1 ptr						*/
-			++arr1;
-			--arr1_size;
+			++arr1_runner;
 		}
 
 	}
 	
 	/*	if either of the arrays still has elemenets, add them to the 
 	 *	merged array 													*/
-	while (arr1_size)
-	{
-		*merged_arr = *arr1;
-		++merged_arr;
-		
-		++arr1;
-		--arr1_size;
-	}
-	
-	while (arr2_size)
-	{
-		*merged_arr = *arr2;
-		++merged_arr;
-		
-		++arr2;
-		--arr2_size;
-	}		
+	/*	call for 2 memcpys, and the compiler will discard one (or both)
+	 *	of them because of optimisation if no elements are left			*/
+	memcpy(merged_runner, arr1_runner, sizeof(int) * (arr1_end - arr1_runner));
+	memcpy(merged_runner, arr2_runner, sizeof(int) * (arr2_end - arr2_runner));
 }
 /******************************************************************************/
 void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 																const void *))
 {
 	void *left = NULL, *right = NULL, *partition = NULL;
+	
+	void *left_side_start = NULL, *right_side_start = NULL;
+	
+	size_t left_side_nmemb = 0, right_side_nmemb = 0;
 	
 	assert(base);
 	assert(nmemb);
@@ -219,17 +228,27 @@ void QSort(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 		return;
 	}
 	
-	/* set the leftest elemenet as the pivot								*/
+	/*	set the leftest elemenet as the pivot								*/
 	partition = PartitionIMP(left, right, left, size, compare);
 	
+	/*	set boundries for the new area to be searched:
+	 *	left and right sides of the pivot.									*/
+	left_side_start = left;
+	left_side_nmemb =  ((char *)partition - (char *)left) / size;
+	
+	right_side_start = (char *)partition + size;
+	right_side_nmemb = ((char *)right - (char *)partition) / size;
+	
+	/*	check if returned partition's left side is still in the array		*/
 	if (partition > left)
 	{
-		QSort(left, ((char *)partition - (char *)left) / size, size, compare);
+		QSort(left_side_start, left_side_nmemb, size, compare);
 	}
+	
+	/*	check if returned partition's right side is still in the array		*/
 	if (partition < right)
 	{
-		QSort((char *)partition + size,
-		 		(((char *)right - ((char *)partition)) / size), size, compare);
+		QSort(right_side_start, right_side_nmemb, size, compare);
 	}
 }
 /*----------------------------------------------------------------------------*/
@@ -245,38 +264,38 @@ void *PartitionIMP(void *left, void *right, void *pivot, size_t size_of_elem,
 	/*	while RSideRunner != LSideRunner									*/
 	while (LSideRunner < RSideRunner)
 	{
-		/*	while leftPointer <= pivot && still inside the array range 	*/
+		/*	while LeftSidePointer <= pivot && still inside the array range 	*/
 		while (cmp_func(LSideRunner, pivot) <= 0 && LSideRunner <= RSideRunner)
 		{
 			/*	increment left runner				*/
 			LSideRunner = (char *)LSideRunner + size_of_elem;
 		}
 		
-		/*	while rightPointer > pivot									*/
+		/*	while RightSidePointer > pivot									*/
 		while (cmp_func(RSideRunner, pivot) > 0)
 		{
 			/*	decrement right runner				*/
 			RSideRunner = (char *)RSideRunner - size_of_elem;
 		}
 		
-		/*	if leftPointer != rightPointer								*/
+		/*	if LeftSidePointer is not equal RightSidePointe					*/
 		if (LSideRunner < RSideRunner)
 		{
-			/*swap leftPointer,rightPointer			*/
+			/*swap LeftSidePointer,RightSidePointer	*/
 			SwapPtrsValues(RSideRunner, LSideRunner, size_of_elem);
 		}
 	}
 		
-		/*   swap leftPointer,pivot											*/
+		/*   swap RightSidePointer,pivot									*/
 		SwapPtrsValues(pivot, (char *)RSideRunner, size_of_elem);
 		
-		/*   return leftPointer												*/
+		/*   return RightSidePointer										*/
 		return (RSideRunner);
 }
 /*----------------------------------------------------------------------------*/
 void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
 {
-	char *ptr1_byte = NULL, *ptr2_byte = NULL;
+	char *ptr1_byte = NULL, *ptr2_byte = NULL, *end_byte = NULL;
 	
 	/*	asserts									*/
 	assert(ptr1);
@@ -285,11 +304,12 @@ void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
 	
 	ptr1_byte = ptr1;
 	ptr2_byte = ptr2;
+	end_byte = ptr1_byte + size_of_elem;
 	
 	if (ptr1_byte != ptr2_byte)
 	{
-		/*	while size_of_elem:						*/
-		while(size_of_elem)
+		/*	while ptr1 didn't reach the end 	*/
+		while(ptr1_byte < end_byte)
 		{
 			/*	look at both ptrs as (char *)	*/
 			/*	xor swap between each char:		*/
@@ -297,7 +317,6 @@ void SwapPtrsValues(void *ptr1, void *ptr2, size_t size_of_elem)
 			*ptr2_byte ^= *ptr1_byte;
 			*ptr1_byte ^= *ptr2_byte;
 			
-			--size_of_elem;
 			++ptr1_byte;
 			++ptr2_byte;
 		}
