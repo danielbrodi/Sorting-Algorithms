@@ -4,7 +4,7 @@
 * Date:				02-06-2021
 * Code Reviewer:	Eran
 * Pseudo Reviewer: 	Ariel/Eran				   								
-* Version:			1.5   								
+* Version:			2.0  								
 * Description:		Sorts and searches algorithms implementations. 
 \******************************************************************************/
 
@@ -166,6 +166,8 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 	/*	create pointers which indicate on the end of each array 		*/ 
 	int *arr1_end = arr1 + arr1_size, *arr2_end = arr2 + arr2_size;
 	
+	int is_arr2_smaller = 0;
+	
 	assert(arr1);
 	assert(arr1_size);
 	assert(arr2);
@@ -175,28 +177,15 @@ void MergeArrIMP(int arr1[], size_t arr1_size, int arr2[], size_t arr2_size,
 	/*	while both arrays have elements:								*/
 	while (arr1_runner < arr1_end && arr2_runner < arr2_end)
 	{
-		/*	if arr1[0] > arr2[0]:								*/
-		if (*arr1_runner > *arr2_runner)
-		{
-			/*	add arr2[0] to the end of merged_arr	*/
-			*merged_runner = *arr2_runner;
-			++merged_runner;
-			/*	increment arr2 ptr						*/
-			++arr2_runner;
-		} 
-		
-		/*	if arr1[0] <= arr2[0]: 								*/
-		else
-		{
-			/*	add arr1[0] to merged_arr				*/
-			*merged_runner = *arr1_runner;
-			++merged_runner;
-			/*	increment arr1 ptr						*/
-			++arr1_runner;
-		}
-
+		/* 	compare the value of each array in each iteration and send the
+		smaller to the merged array										*/
+		is_arr2_smaller = *arr2_runner < *arr1_runner; 
+		*merged_runner = (!is_arr2_smaller * *arr1_runner) +
+											(is_arr2_smaller * *arr2_runner);
+		++merged_runner;							
+		arr1_runner += !is_arr2_smaller;
+		arr2_runner += is_arr2_smaller;
 	}
-	
 	/*	if either of the arrays still has elemenets, add them to the 
 	 *	merged array 													*/
 	/*	call for 2 memcpys, and the compiler will discard one (or both)
